@@ -1,7 +1,9 @@
 <?php
 	namespace PhoenixSNS\Objects;
 	
-	use WebFX\System;
+	use Phast\System;
+	use Phast\Data\DataSystem;
+	use PDO;
 	
 	class Theme
 	{
@@ -30,15 +32,17 @@
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
+			$pdo = DataSystem::GetPDO();
 			$themes = array();
 			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Themes";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
-			$result = $MySQL->query($query);
-			$count = $result->num_rows;
+			
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$themes[] = Theme::GetByAssoc($values);
 			}
 			return $themes;
@@ -47,23 +51,31 @@
 		{
 			if (!is_numeric($id)) return null;
 			
-			global $MySQL;
-			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Themes WHERE theme_ID = " . $id;
-			$result = $MySQL->query($query);
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Themes WHERE theme_ID = :theme_ID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":theme_ID" => $id
+			));
 			if ($result->num_rows == 0) return null;
 			
-			$values = $result->fetch_assoc();
+			$values = $result->fetch(PDO::FETCH_ASSOC);
 			return Theme::GetByAssoc($values);
 		}
 		public static function GetByName($name)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Themes WHERE theme_Name = '" . $MySQL->real_escape_string($name) . "'";
-			$result = $MySQL->query($query);
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Themes WHERE theme_Name = :theme_Name";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":theme_Name" => $name
+			));
 			
-			if ($result->num_rows > 0)
+			if ($statement->rowCount() > 0)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				return Theme::GetByAssoc($values);
 			}
 			return null;

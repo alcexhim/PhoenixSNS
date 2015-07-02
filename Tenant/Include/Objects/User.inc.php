@@ -1,19 +1,62 @@
 <?php
 	namespace PhoenixSNS\Objects;
 	
-	use WebFX\System;
+	use Phast\System;
 	
-	use DataFX\Table;
-	use DataFX\Record;
-	use DataFX\RecordColumn;
+	use Phast\Data\DataSystem;
+	use Phast\Data\Table;
+	use Phast\Data\Record;
+	use Phast\Data\RecordColumn;
 	
-	// Everyone - profile is visible to everyone on the Internet
-	// Sitewide - profile is only visible to members of Psychatica
-	// ExtendedFriends - profile is visible to friends and friends of friends
-	// Friends - profile is visible only to people who are already your friends
-	// Hidden - profile is hidden from everyone (except the profile owner)
-	\Enum::Create("PhoenixSNS\\Objects\\UserProfileVisibility", "Everyone", "Sitewide", "ExtendedFriends", "Friends", "Hidden");
-	\Enum::Create("PhoenixSNS\\Objects\\UserPresenceStatus", "Offline", "Available", "Away", "ExtendedAway", "Busy", "Hidden");
+	use Phast\Enumeration;
+
+	/**
+	 * Contains constants that define a user's profile visibility.
+	 * @author Michael Becker
+	 * @todo Move this into a generic SecurableObject property SecurableObjectVisibility
+	 */
+	class UserProfileVisibility extends Enumeration
+	{
+		/**
+		 * The user's profile is hidden from everyone (except the profile owner).
+		 * @var int 0
+		 */
+		const Hidden = 0;
+		/**
+		 * The user's profile is visible to everyone on the Internet.
+		 * @var int 1
+		 */
+		const Everyone = 1;
+		/**
+		 * The user's profile is only visible to members of this social network.
+		 * @var int 2
+		 */
+		const Sitewide = 2;
+		/**
+		 * The user's profile is visible to their friends and the friends of their friends.
+		 * @var int 3
+		 */
+		const ExtendedFriends = 3;
+		/**
+		 * The user's profile is visible only to people who are already friends with that user.
+		 * @var int 4
+		 */
+		const Friends = 4;
+	}
+	
+	/**
+	 * Contains constants that define a user's presence status.
+	 * @author Michael Becker
+	 */
+	class UserPresenceStatus extends Enumeration
+	{
+		const Offline = 0;
+		const Available = 1;
+		const Away = 2;
+		const ExtendedAway = 3;
+		const Busy = 4;
+		const Hidden = 5;
+	}
 	
 	class UserProfileContent
 	{
@@ -59,10 +102,27 @@
 	}
 	class User
 	{
+		/**
+		 * The unique identifier used to identify this User in the database.
+		 * @var int
+		 */
 		public $ID;
+		/**
+		 * The private login name used by this User to log into the system.
+		 * @var string
+		 */
 		public $UserName;
+		/**
+		 * The short name used publicly in URLs around the site.
+		 * @var string
+		 */
 		public $ShortName;
+		/**
+		 * The long name displayed publicly around the site.
+		 * @var string
+		 */
 		public $LongName;
+		
 		public $EmailAddress;
 		public $BirthDate;
 		public $RealName;
@@ -76,7 +136,17 @@
 		public $ConsecutiveLoginCount;
 		public $ConsecutiveLoginAttempts;
 		public $Language;
+		
+		/**
+		 * The user's presence status information.
+		 * @var UserPresence
+		 */
 		public $Presence;
+		
+		/**
+		 * The visibility of this user's profile.
+		 * @var UserProfileVisibility
+		 */
 		public $ProfileVisibility;
 		
 		public function DailyReward()
@@ -115,6 +185,7 @@
 		
 		public function Login()
 		{
+			// TODO: this should all be replaced eventually
 			global $MySQL;
 			
 			$query = "SELECT (DATE(user_LastLoginTimestamp) < DATE(NOW())) FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Users WHERE user_ID = " . $user->ID;
