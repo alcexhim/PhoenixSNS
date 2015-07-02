@@ -1,0 +1,1 @@
+This is where your application resource bundles go. Generally, you would make a folder for each application (for example, I have one for Psychatica and one for TinierWorld). This allows you to host multiple PhoenixSNS instances with different content on the same server.

@@ -1,0 +1,254 @@
+<?php
+	namespace PhoenixSNS\Pages;
+	
+	use WebFX\System;
+	use WebFX\WebStyleSheet;
+	
+	use WebFX\Controls\Window;
+	
+	use PhoenixSNS\MasterPages\WebPage;
+	use PhoenixSNS\Objects\LanguageString;
+	
+	class MainPage extends WebPage
+	{
+		public function __construct()
+		{
+			parent::__construct();
+			$this->DisplayChrome = false;
+		}
+		protected function RenderContent()
+		{
+			/*
+			$stories = DashboardStory::Get();
+			if (count($stories) > 0)
+			{
+				foreach ($stories as $story)
+				{
+					$card = new Card('card' . $story->ID, $story->Title, $story->Content, $story->ClassName, $story->IconName);
+					$card->Actions = array
+					(
+						new CardAction(LanguageString::GetByName("unlike"), "#", null, 'thumbs-o-up', '_blank', 4),
+						new CardAction(LanguageString::GetByName("comment"), null, null, "comment", "_blank"),
+						new CardAction(LanguageString::GetByName("share"), null, null, "share", "_blank")
+					);
+					$card->Render();
+				}
+			}
+			else
+			{
+				?><p>There's nothing here!</p><?php
+			}
+			*/
+			
+			/*
+			(new Card('card1', '<a href="#">alcexhim</a> posted a video <span class="Location"> at <a href="/world/town-square">Town Square</a>',
+			'Just chillin\' with the peeps.',
+			null, "video-camera",
+			array
+			(
+				new CardAction(LanguageString::GetByName("like"), "#", null, "thumbs-up", null),
+			)))->Render();
+			
+			(new Card('card2', "Ready for the next big thing in virtual concert production?",
+			'<a href="http://www.concertroid.com" target="_blank"><img class="Advertisement" style="width: 100%;" src="http://www.concertroid.com/images/logo.png" alt="http://www.concertroid.com/" /></a>',
+			"Sponsored", "star",
+			array
+			(
+				new CardAction("Like Concertroid on Psychatica", "#", null, 'thumbs-up', '_blank'),
+				new CardAction("Visit Web Site", "http://www.concertroid.com", null, "external-link", "_blank")
+			)))->Render();
+			
+			(new Card('card3', "Psychatica design updated",
+			'The new design is based around the concept of &quot;cards&quot;, which can update automatically
+			over time and present you with only the most important information and an intuitive way to act
+			upon it.',
+			"Official", "info",
+			array
+			(
+				new CardAction(LanguageString::GetByName("unlike"), "#", null, 'thumbs-o-up', '_blank', 4),
+				new CardAction(LanguageString::GetByName("comment"), null, null, "comment", "_blank"),
+				new CardAction(LanguageString::GetByName("share"), null, null, "share", "_blank")
+			)))->Render();
+			
+			(new Card('card4', "Psychatica fixes and updates",
+			'The major issue with Journal creation has been fixed, and the
+			Market now has some items for you to buy. Enjoy the new fashion
+			items in the <a href="' . System::ExpandRelativePath("~/market") . '">Psychatica Market</a>!',
+			"Official", "info",
+			array
+			(
+				new CardAction(LanguageString::GetByName("like"), "#", null, 'thumbs-up', '_blank', 1),
+				new CardAction(LanguageString::GetByName("comment"), null, null, "comment", "_blank"),
+				new CardAction(LanguageString::GetByName("share"), null, null, "share", "_blank")
+			)))->Render();
+			
+			(new Card('card4', "Psychatica updates",
+			'The terminology &quot;User name&quot; for the private credential associated with your account has been changed to
+			&quot;User ID&quot; to avoid confusion with the publicly-visible Short and Long names so that people are not encouraged
+			to use the same User ID as their Short or Long name. It will eventually be made impossible to create a user account
+			with the same User ID and Short/Long name.',
+			"Official", "info",
+			array
+			(
+				new CardAction(LanguageString::GetByName("like"), "#", null, 'thumbs-up', '_blank', 1),
+				new CardAction(LanguageString::GetByName("comment"), null, null, "comment", "_blank"),
+				new CardAction(LanguageString::GetByName("share"), null, null, "share", "_blank")
+			)))->Render();
+			
+			(new Card('card4', "Psychatica updates",
+			'The World button on the navigation bar now only displays when you are logged in. This is to avoid confusing users who don\'t
+			realize that they must be logged in to use the World.',
+			"Official", "info",
+			array
+			(
+				new CardAction(LanguageString::GetByName("like"), "#", null, 'thumbs-up', '_blank', 1),
+				new CardAction(LanguageString::GetByName("comment"), null, null, "comment", "_blank"),
+				new CardAction(LanguageString::GetByName("share"), null, null, "share", "_blank")
+			)))->Render();
+			*/
+		?>
+		<div class="Card Official">
+			<div class="Title"><i class="fa fa-picture-o"></i> <span class="Text">New wallpaper available</span></div>
+			<div class="Content">
+				<?php
+					$img = "~/images/wallpaper/bg1.jpg";
+				?>
+				<a style="text-align: center; display: block;" href="<?php echo(System::ExpandRelativePath($img)); ?>" target="_blank"><img src="<?php echo(System::ExpandRelativePath($img)); ?>" style="width: 300px; height: auto;" /></a>
+				<span class="Description">
+					Our Phoenix-human hybrid girl Phelicia loves to go sky-tumbling! She will keep you company on your desktop or laptop PC. Be on the lookout for more designs targeted at mobile devices!
+				</span>
+				<br /><br />
+				Designed by <a href="#">roololoo</a>.
+			</div>
+			<div class="Actions Horizontal">
+				<a href="#"><i class="fa fa-thumbs-up"></i> <span class="Text"><?php echo(LanguageString::GetByName("like")); ?></a>
+				<a href="#"><i class="fa fa-comment"></i> <span class="Text"><?php echo(LanguageString::GetByName("comment")); ?></a>
+				<a href="#"><i class="fa fa-download"></i> <span class="Text"><?php echo(LanguageString::GetByName("download")); ?></a>
+			</div>
+		</div>
+		<?php
+	/*
+	<div class="Card">
+		<div class="Title"><span class="Text"><?php echo(LanguageString::GetByName("currentevents")); ?></span></div>
+		<div class="Content">
+			<div class="ListBox">
+				<?php
+				$events = Event::Get();
+				foreach ($events as $event)
+				{
+				?>
+				<a href="<?php echo(\System::ExpandRelativePath("~/Events/" . $event->Name)); ?>">
+					<div class="ListItemTitle">
+						<?php
+							echo("<span class=\"EventType\" style=\"color: " . $event->Type->Color . "; border-color: " . $event->Type->Color . ";\">" . $event->Type->Title . "</span> ");
+							echo($event->Title);
+							echo("<span class=\"EventDate\">" . $event->BeginDate . " &mdash; " . $event->EndDate . "</span>");
+						?>
+					</div>
+					<div class="ListItemDescription">
+						<?php
+							echo($event->Description);
+						?>
+					</div>
+				</a>
+				<?php
+				}
+				?>
+			</div>
+		</div>
+	</div>
+	*/
+			/*
+			
+			*/
+			
+			/*
+			<tr>
+				<?php
+				if (\System::$Configuration["Questions.Enabled"])
+				{
+				?>
+				<td style="width: 50%; vertical-align: top;">
+					<div class="Panel">
+						<h3 class="PanelTitle"><?php echo(LanguageString::GetByName("questions")); ?></h3>
+						<div class="PanelContent">
+						<?php
+							$questions = Question::Enumerate();
+							if (count($questions) == 0)
+							{
+						?>
+						<p>No questionnaires yet, why not <a href="/questions/create.mmo">create one</a>!</p>
+						<?php
+							}
+						?>
+						</div>
+					</div>
+				</td>
+				<?php
+				}
+				if (\System::$Configuration["Suggestions.Enabled"])
+				{
+				?>
+				<td style="vertical-align: top;">
+					<div class="Panel">
+						<h3 class="PanelTitle"><?php echo(LanguageString::GetByName("suggestions")); ?></h3>
+						<div class="PanelContent">
+							<p>
+								Help us improve and make the site even more awesome! Tell us what kind of features, games,
+								items, and other ideas you'd like to see in Psychatica! If we use your ideas, you might
+								win prizes!
+							</p>
+							<?php
+							if ($CurrentUser == null)
+							{
+							?>
+							<p>
+								If you are interested in contributing, please first log into Psychatica by the form on the
+								right panel.
+							</p>
+							<?php
+							}
+							else
+							{
+								$form = new WebForm("modules/suggestionBoxReceive.php", "POST");
+								$form->Begin();
+								
+								$cboSuggestionTypeID = new WebDropDownList("suggestion_type_id");
+								$cboSuggestionTypeID->Width = "100%";
+								
+								$query = "SELECT * FROM phpmmo_suggestion_types";
+								$result = mysql_query($query);
+								$count = mysql_num_rows($result);
+								for ($i = 0; $i < $count; $i++)
+								{
+									$values = mysql_fetch_assoc($result);
+									$cboSuggestionTypeID->AddItem($values["suggestion_type_id"], $values["suggestion_type_title"]);
+								}
+								
+								$cboSuggestionTypeID->Render();
+								
+								$txtSuggestionContent = new WebTextBox("suggestion_content");
+								$txtSuggestionContent->RowCount = 3;
+								$txtSuggestionContent->Width = "100%";
+								$txtSuggestionContent->Multiline = true;
+								$txtSuggestionContent->Render();
+								
+								$cmdSubmit = new WebButton();
+								$cmdSubmit->Text = "Submit Request";
+								$cmdSubmit->HorizontalAlign = "right";
+								$cmdSubmit->Render();
+								
+								$form->End();
+							}
+							?>
+						</div>
+					</div>
+				</td>
+				<?php
+				}
+				?>
+			</tr>
+			*/
+		}
+	}
+?>

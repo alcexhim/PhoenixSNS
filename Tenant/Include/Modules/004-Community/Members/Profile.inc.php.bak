@@ -1,0 +1,629 @@
+<?php
+	use WebFX\System;
+	use WebFX\ModulePage;
+	
+	use WebFX\Controls\ButtonGroup;
+	use WebFX\Controls\ButtonGroupButton;
+
+	use WebFX\Controls\BreadcrumbItem;
+	
+	use WebFX\WebStyleSheet;
+	use WebFX\WebResourceLink;
+	
+	use PhoenixSNS\Objects\Group;
+	use PhoenixSNS\Objects\Item;
+	use PhoenixSNS\Objects\User;
+	use PhoenixSNS\Objects\LanguageString;
+
+	$id = $path[1];
+	$thisuser = User::GetByIDOrShortName($id);
+	
+	
+	function displayProfileTitle()
+	{
+		$CurrentUser = User::GetCurrent();
+		$path = System::GetVirtualPath();
+		$id = $path[1];
+		$thisuser = User::GetByIDOrShortName($id);
+		if ($thisuser == null) return;
+		
+?>
+	<div class="ProfileTitle">
+		<?php
+		mmo_display_user_badges_by_user($thisuser);
+		?>
+		<span class="ProfileUserName"><?php echo($thisuser->LongName); ?></span>
+		<?php
+		if ($action != "customize")
+		{
+		?>
+			<span class="ProfileControlBox">
+			<?php
+			if ($CurrentUser != null && ($thisuser->ID != $CurrentUser->ID))
+			{
+				if (mmo_has_user_friend_request(null, $thisuser))
+				{
+				?>
+				<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Disconnect">Withdraw Friend Request</a>
+				<?php
+				}
+				else if (mmo_has_user_friend_request($thisuser, $CurrentUser))
+				{
+				?>
+				<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Connect/<?php echo(mmo_get_user_friendship_auth_key($thisuser, $CurrentUser)); ?>">Confirm Friendship</a>
+				<?php
+				}
+				else if ($CurrentUser->HasFriend($thisuser))
+				{
+				?>
+				<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Disconnect"><?php echo(LanguageString::GetByName("friend_disconnect")); ?></a>
+				<?php
+				}
+				else
+				{
+				?>
+				<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Connect"><?php echo(LanguageString::GetByName("friend_connect")); ?></a>
+				<?php
+				}
+			?>
+			<form action="<?php echo(System::$Configuration["Application.BasePath"]); ?>/Account/Messages/Create" method="POST">
+				<input type="hidden" name="message_receiver" value="<?php echo($thisuser->ID); ?>" />
+				<input class="LinkButton" type="submit" value="<?php echo(LanguageString::GetByName("message_send")); ?>" />
+			</form>
+			<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Trade/"><?php echo(LanguageString::GetByName("resource_trade")); ?></a>
+			<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Block" onclick="/* ReportBlockDialog.Show(); return false; */">Report/Block</a>
+			<?php
+			}
+			if ($thisuser->IsAuthenticated)
+			{
+			?>
+				<a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($id); ?>/Customize">Customize Profile</a>
+			<?php
+			}
+		}
+		?>
+			</span>
+	</div>
+<?php
+	}
+	
+					
+	if (count($path) > 2 && $path[2] != "")
+	{
+		$action = $path[2];
+	}
+	else
+	{
+		$action = "profile";
+	}
+	
+	if ($action == "customize" && !$thisuser->IsAuthenticated) $action = "profile";
+	
+	if ($action == "customize")
+	{
+		if ($_POST["pc"] != null)
+		{
+			mmo_user_update_profile_content($thisuser, $_POST["pc"]);
+			System::Redirect("~/community/members/" . $thisuser->ShortName . "/information");
+			return;
+		}
+	}
+
+
+	if ($thisuser == null && $action != "images")
+	{
+		$errorPage = new PsychaticaErrorPage();
+		$errorPage->Title = "User Not Found";
+		$errorPage->Message = "That user does not exist in the system. They may have deleted their account, or you may have typed their name incorrectly.";
+		$errorPage->ReturnButtonURL = "~/community/members";
+		$errorPage->ReturnButtonText = "Return to User List";
+		
+		$errorPage->Render();
+		return;
+	}
+	
+	if ($thisuser->ProfileVisibility != 3 && $action != "images")
+	{
+		$visible = false;
+		if ($thisuser->ProfileVisibility == 1 && $CurrentUser != null)
+		{
+			// friends only
+			$visible = ($thisuser->HasFriend($CurrentUser));
+		}
+		else if ($thisuser->ProfileVisibility == 2)
+		{
+			// any member of psychatica
+			$visible = ($CurrentUser != null);
+		}
+		
+		if (!$visible)
+		{
+			$errorPage = new PsychaticaErrorPage();
+			$errorPage->Title = "Private Profile";
+			$errorPage->DisplayContactMessage = false;
+			if ($thisuser->ProfileVisibility == 0)
+			{
+				$errorPage->Message = "This user's profile is private.";
+			}
+			else if ($thisuser->ProfileVisibility == 1)
+			{
+				$errorPage->Message = "This user's profile is only visible to friends.";
+			}
+			else if ($thisuser->ProfileVisibility == 2)
+			{
+				$errorPage->Message = "This user's profile is not visible to people outside of Psychatica.";
+			}
+			$errorPage->ReturnButtonURL = "~/community/members";
+			$errorPage->ReturnButtonText = "Return to User List";
+			
+			$errorPage->Render();
+			return;
+		}
+	}
+	
+	switch ($path[2])
+	{
+		case "journals":
+		{
+			if ($path[4] == "entries.rss" || $path[4] == "entries.atom")
+			{
+				require("journal/detail.inc.php");
+				return;
+			}
+			else if ($path[4] == "entries" && $path[6] == "comment")
+			{
+				$journal = Journal::GetByIDOrName($path[3]);
+				if ($journal == null) return;
+				
+				$entry = JournalEntry::GetByIDOrName($path[5]);
+				
+				$entryUrl = System::ExpandRelativePath("~/community/members/" . $thisuser->ShortName . "/journals/" . $journal->Name . "/entries/" . $entry->Name);
+				
+				switch ($path[6])
+				{
+					case "comment":
+					{
+						if ($_SERVER["REQUEST_METHOD"] == "POST")
+						{
+							$reply_to = null;
+							if ($_POST["reply_comment_id"] != null)
+							{
+								$reply_to = JournalEntryComment::GetByID($_POST["reply_comment_id"]);
+							}
+							
+							$title = $_POST["comment_title"];
+							$content = $_POST["comment_content"];
+							
+							if (!$entry->AddComment($title, $content, $reply_to))
+							{
+								$page = new PsychaticaErrorPage();
+								$page->ErrorCode = mysql_errno();
+								$page->ErrorDescription = mysql_error();
+								$page->Render();
+								return;
+							}
+							
+							System::Redirect($entryUrl);
+							return;
+						}
+					}
+				}
+			}
+			break;
+		}
+		case "rooms":
+		{
+			require("rooms/default.inc.php");
+			return;
+		}
+	}
+	
+	switch ($action)
+	{
+		case "block":
+		{
+			require("block.inc.php");
+			return;
+		}
+		case "images":
+		{
+			if ($thisuser == null) $thisuser = User::GetByIDOrShortName($id, true);
+			if ($thisuser == null)
+			{
+				header("HTTP/1.1 404 Not Found");
+				header("User-Agent: psychati/1.1");
+				return;
+			}
+			
+			$location = "avatar";
+			$size = "thumbnail.png";
+			if (count($path) > 3)
+			{
+				$location = $path[3];
+				if (count($path) > 4)
+				{
+					$size = $path[4];
+				}
+			}
+			
+			$headers = apache_request_headers();
+			switch ($location)
+			{
+				case "avatar":
+				{
+					if (isset($headers["If-Modified-Since"]) && ($headers["If-Modified-Since"] != null))
+					{
+						// load from cache if available
+						$time1 = strtotime($thisuser->OutfitCacheTimestamp);
+						$time2 = strtotime($headers["If-Modified-Since"]);
+						
+						if ($time1 <= $time2)
+						{
+							header("HTTP/1.1 304 Not Modified");
+							return;
+						}
+					}
+					
+					header("Cache-Control: public");
+					// header("Last-Modified: " . gmdate(DATE_RFC1123, $thisuser->OutfitCacheTimestamp));
+					
+					$base = 1;	// old base
+					$view = 1;	// side view
+					
+					$filenames = array("images/avatar/bases/" . $base . "/" . $view . "/preview.png");
+					
+					$items = Item::GetEquippedByUser($thisuser);
+					foreach ($items as $item)
+					{
+						foreach ($item->Images as $image)
+						{
+							$filenames[] = "images/avatar/items/" . $item->ID . "/" . $base . "/" . $view . "/" . $image->ID . ".png";
+						}
+					}
+					
+					switch ($size)
+					{
+						case "thumbnail.png":
+						{
+							$image = imagelayerfiles($filenames);
+							$thumb = imagecreatetruecolor(112, 112);
+							
+							imagesavealpha($thumb, true);
+							
+							$trans_colour = imagecolorallocatealpha($thumb, 0, 0, 0, 127);
+							imagefill($thumb, 0, 0, $trans_colour);
+							
+							imagecopyresized($thumb, $image, 0, 0, 0, 0, 112, 112, 112, 112);
+							
+							imagesavealpha($thumb, true);
+							imagealphablending($thumb, true);
+							
+							header('Content-Type: image/png');
+							imagepng($thumb);
+							
+							
+							// Update the outfit cache status for this user
+							// mysql_query("UPDATE phpmmo_members SET member_outfit_cache_timestamp = '" . gmdate(DATE_RFC1123) . "' WHERE member_id = " . $thisuser->ID);
+							return;
+						}
+						case "preview.png":
+						{
+							$image = imagelayerfiles($filenames);
+							header('Content-Type: image/png');
+							imagepng($image);
+							
+							
+							// Update the outfit cache status for this user
+							// mysql_query("UPDATE phpmmo_members SET member_outfit_cache_timestamp = '" . gmdate(DATE_RFC1123) . "' WHERE member_id = " . $thisuser->ID);
+							return;
+						}
+					}
+					return;
+				}
+			}
+			// width: 112px;
+			// height: 112px;
+			return;
+		}
+		case "theme":
+		{
+			if (count($path) > 3)
+			{
+				switch($path[3])
+				{
+					case "stylesheet":
+					{
+						if (file_exists("style/themes/user/" . $thisuser->UserName . ".css"))
+						{
+							header("Content-Type: text/css");
+							readfile("style/themes/user/" . $thisuser->UserName . ".css");
+						}
+						else
+						{
+							header("HTTP/1.1 404 File Not Found");
+						}
+					}
+				}
+			}
+			return;
+		}
+		case "connect":
+		{
+			if (count($path) > 3 && $path[3] != "")
+			{
+				if (!mmo_accept_user_friend_request($thisuser, $CurrentUser, $path[3]))
+				{
+					$page = new PsychaticaErrorPage("Friendship Authorization Key invalid");
+					$page->Message = "The Friendship Authorization Key you provided was invalid.  If you copied the key from an e-mail, please make sure you typed it correctly.";
+					$page->ReturnButtonURL = "~/community/members/" . $thisuser->ShortName;
+					$page->ReturnButtonText = "Return to " . $thisuser->LongName . "'s Profile";
+					$page->Render();
+					return;
+				}
+				else
+				{
+					System::Redirect("~/community/members/" . $thisuser->ShortName);
+					return;
+				}
+			}
+			else
+			{
+				mmo_send_user_friend_request(null, $thisuser);
+				System::Redirect("~/community/members/" . $thisuser->ShortName);
+			}
+			return;
+		}
+		case "disconnect":
+		{
+			if ($_POST["attempt"] == "1")
+			{
+				mmo_withdraw_user_friend_request(null, $thisuser);
+				System::Redirect("~/community/members/" . $thisuser->ShortName);
+				return;
+			}
+			else
+			{
+				$page = new PsychaticaWebPage(LanguageString::GetByName("friend_disconnect"));
+				$page->BeginContent();
+			?>
+				<div class="Panel">
+					<h3 class="PanelTitle"><?php echo(LanguageString::GetByName("confirm")); ?></h3>
+					<div class="PanelContent">
+						<p>Are you sure you want to cancel your friendship with <?php echo($thisuser->LongName); ?>? Please note that once your friendship is cancelled, <?php echo($thisuser->LongName); ?> will need to re-confirm you if you request friendship again.</p>
+						<form action="disconnect" method="POST">
+							<input type="hidden" name="attempt" value="1" />
+							<table style="margin-left: auto; margin-right: auto;">
+								<tr>
+									<td colspan="2" style="text-align: right;">
+										<input type="submit" value="<?php echo(LanguageString::GetByName("friend_disconnect")); ?>" />
+										<a class="Button" href="<?php echo(System::ExpandRelativePath("~/community/members/" . $thisuser->ShortName)); ?>"><?php echo(LanguageString::GetByName("return_to_profile")); ?></a>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			<?php
+				$page->EndContent();
+			}
+			return;
+		}
+		case "trade":
+		{
+			require("trade.inc.php");
+			return;
+		}
+		default:
+		{
+			if ($path[2] == "")
+			{
+				if (System::$Configuration["Shoutout.Enabled"])
+				{
+					System::Redirect("~/community/members/" . $path[1] . "/shoutout");
+				}
+				else
+				{
+					System::Redirect("~/community/members/" . $path[1] . "/information");
+				}
+				return;
+			}
+			
+			$page = new PsychaticaWebPage(sprintf(LanguageString::GetByName("profile_title"), $thisuser->LongName));
+			$page->BreadcrumbItems = array
+			(
+				new BreadcrumbItem("~/community", "Community"),
+				new BreadcrumbItem("~/community/members", "Members"),
+				new BreadcrumbItem("~/community/members/" . $thisuser->ShortName, $thisuser->LongName, true)
+			);
+			
+			if (file_exists("style/themes/user/" . $thisuser->UserName . ".css"))
+			{
+				$page->StyleSheets[] = new WebStyleSheet("~/community/members/" . $thisuser->ShortName . "/theme/stylesheet");
+			}
+			
+			if ($path[2] == "journals" && $path[3] != "")
+			{
+				$page->ResourceLinks[] = new WebResourceLink("alternate", "application/atom+xml", "~/community/members/" . $thisuser->ShortName . "/journals/" . $path[3] . "/entries.atom", "Atom feed");
+			}
+			
+			$page->BeginContent();
+?>
+<div class="ProfilePage">
+	<?php
+		displayProfileTitle();
+		
+		$friends = $thisuser->GetFriends();
+		$groups = Group::GetByUser($thisuser);
+	?>
+	<?php
+	if ($action == "customize")
+	{
+		require("customize.inc.php");
+	}
+	else
+	{
+		if ($thisuser->Theme != null)
+		{
+			if ($thisuser->Theme->Creator != null)
+			{
+		?>
+		<p>Theme by <a href="<?php echo(System::$Configuration["Application.BasePath"]); ?>/community/members/<?php echo($thisuser->Theme->Creator->ShortName); ?>"><?php echo($thisuser->Theme->Creator->LongName); ?></a></p>
+		<?php
+			}
+		}
+	?>
+	<div class="ProfileAvatarPane">
+		<div class="ProfileAvatar">
+			<?php $thisuser->EmbedAvatar(); ?>
+		</div>
+		<div class="ProfileInformation">
+			<div class="ProfileUserName"><?php echo($thisuser->LongName); ?></div>
+		</div>
+	</div>
+	<div class="ProfileActionListPane">
+		<div class="ActionList">
+			<?php
+			
+			class MemberModulePage extends ModulePage
+			{
+				public $Active;
+				public $Enabled;
+				public $Title;
+				public $PathName;
+				public $UserFunction;
+				
+				public function __construct($name, $title, $pathName, $userFunction, $enabled = null)
+				{
+					$this->Name = $name;
+					$path = System::GetVirtualPath();
+					array_shift($path);
+					$this->Active = ($path[2] == $pathName);
+					if ($enabled == null)
+					{
+						if (isset(System::$Configuration[$name . ".Enabled"]))
+						{
+							$this->Enabled = (System::$Configuration[$name . ".Enabled"]);
+						}
+						else
+						{
+							$this->Enabled = false;
+						}
+					}
+					else
+					{
+						$this->Enabled = $enabled;
+					}
+					$this->Title = $title;
+					$this->PathName = $pathName;
+					$this->UserFunction = $userFunction;
+				}
+				
+				public function Execute($params)
+				{
+					if (!$this->Enabled) return false;
+					if ($this->UserFunction == null) return false;
+					return call_user_func($this->UserFunction, $params);
+				}
+			}
+			
+			$modules = array
+			(
+				new MemberModulePage("Shoutout", LanguageString::GetByName("shoutout"), "shoutout", function($path)
+				{
+					$thisuser = User::GetByIDOrShortName($path[0]);
+					require("Shoutout.inc.php");
+					return true;
+				}),
+				new MemberModulePage("Groups", LanguageString::GetByName("groups"), "groups", function($path)
+				{
+					$thisuser = User::GetByIDOrShortName($path[0]);
+					require("Groups.inc.php");
+					return true;
+				}),
+				new MemberModulePage("Friends", LanguageString::GetByName("friends"), "friends", function($path)
+				{
+					$thisuser = User::GetByIDOrShortName($path[0]);
+					require("Friends.inc.php");
+					return true;
+				}, true),
+				new MemberModulePage("Relationships", LanguageString::GetByName("relationships"), "relationships", function($path)
+				{
+					$thisuser = User::GetByIDOrShortName($path[0]);
+					require("Relationships.inc.php");
+					return true;
+				}, false),
+				new MemberModulePage("Market", LanguageString::GetByName("inventory"), "inventory", function($path)
+				{
+					$thisuser = User::GetByIDOrShortName($path[0]);
+					require("Inventory/Main.inc.php");
+					return true;
+				}),
+				new MemberModulePage("Storage", LanguageString::GetByName("storage"), "storage", function($path)
+				{
+					$thisuser = User::GetByIDOrShortName($path[0]);
+					require("Storage.inc.php");
+					return true;
+				})
+			);
+			?>
+			
+			<?php if ($path[2] == "information") { ?>
+			<span class="Selected"><?php echo(LanguageString::GetByName("information")); ?></span>
+			<?php } else { ?>
+			<a href="<?php echo(System::ExpandRelativePath("~/community/members/" . $id . "/information")); ?>"><?php echo(LanguageString::GetByName("information")); ?></a>
+			<?php } ?>
+			
+			<?php
+			foreach ($modules as $module)
+			{
+				if ($module->Enabled)
+				{
+			?>
+			<?php if ($path[2] == $module->PathName) { ?>
+			<span class="Selected"><?php echo($module->Title); ?></span>
+			<?php } else { ?>
+			<a href="<?php echo(System::ExpandRelativePath("~/community/members/" . $id . "/" . $module->PathName)); ?>"><?php echo($module->Title); ?></a>
+			<?php } ?>
+			<?php
+				}
+			}
+			?>
+		</div>
+	</div>
+	<div class="ProfileContentPane">
+	<?php
+		// TODO: Make this into Submodules
+		if ($path[2] == "information")
+		{
+			require("Information.inc.php");
+		}
+		else
+		{
+			$found = false;
+			foreach ($modules as $module)
+			{
+				if ($module->Enabled && $module->Active)
+				{
+					$vpath = $path;
+					array_shift($vpath);
+					$found = $module->Execute($vpath);
+					break;
+				}
+			}
+			if (!$found)
+			{
+				echo("Submodule or pagelet not found");
+			}
+		}
+	?>
+	</div>
+	<?php
+	}
+	?>
+</div>
+<?php
+			$page->EndContent();
+			break;
+		}
+	}
+?>

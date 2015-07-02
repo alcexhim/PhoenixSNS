@@ -1,0 +1,73 @@
+div.TypeaheadTextbox
+{
+	border: inset 2px;
+	background-color: Window;
+	color: WindowText;
+	padding: 2px 2px 2px 2px;
+	cursor: text;
+	input[type=text]
+	{
+		border: none 0px;
+	}
+	span.TypeaheadTextboxSelectedItems
+	{
+		span.TypeaheadTextboxSelectedItem
+		{
+			border: solid 1px ThreeDDarkShadow;
+			background-color: ThreeDFace;
+			cursor: default;
+			
+			width: 100%;
+			padding-left: 4px;
+			padding-right: 4px;
+			
+			a, a:hover
+			{
+				width: auto;
+				border: none;
+				text-transform: none;
+			}
+			a.TypeaheadTextboxSelectedItemCloseButton
+			{
+				color: #FF0000;
+			}
+		}
+	}
+}
+
+div.TypeaheadTextboxSuggestionList
+{
+	border: solid 1px #000000;
+	background-color: Window;
+	display: none;
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 200px;
+	cursor: default;
+	a
+	{
+		width: auto;
+		border: none;
+		text-transform: none;
+		
+		display: block;
+		color: WindowText;
+		cursor: default;
+		text-decoration: none;
+		padding: 4px 4px 4px 24px;
+		text-align: left;
+		
+		&:hover
+		{
+			background-color: Highlight;
+			color: HighlightText;
+		}
+	}
+	h2
+	{
+		font-size: 14pt;
+		padding-bottom: 0px;
+		margin-bottom: 6px;
+		border-bottom: solid 1px #000000;
+	}
+}

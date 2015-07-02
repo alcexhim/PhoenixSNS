@@ -1,0 +1,150 @@
+div.ChatBar
+{
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	width: 100%;
+	
+	padding-left: 8px;
+	
+	background-color: ThreeDFace;
+	line-height: normal;
+	
+	z-index: 100;
+	
+	a.ChatBarButton
+	{
+		display: inline-block;
+		padding-left: 8px;
+		padding-right: 8px;
+		
+		min-width: 96px;
+		
+		border: outset 2px;
+		color: WindowText;
+		text-decoration: none;
+		cursor: default;
+		
+		&.Selected
+		{
+			border: inset 2px;
+			background-color: #FFFFFF;
+		}
+		img.ChatBarButtonAvatar
+		{
+			width: 24px;
+			height: 24px;
+			margin-right: 8px;
+		}
+		span.ChatBarButtonText
+		{
+			position: relative;
+			top: -6px;
+		}
+	}
+	
+	&.Top
+	{
+		top: 0px;
+		div.ChatPanel
+		{
+			top: 42px;
+		}
+	}
+	&.Bottom
+	{
+		bottom: 0px;
+		div.ChatPanel
+		{
+			bottom: 42px;
+		}
+	}
+}
+
+div.ChatBar, div.ChatPanel
+{
+}
+div.ChatPanel
+{
+	width: 260px;
+	display: none;
+	
+	position: fixed;
+	
+	border: solid 1px ThreeDShadow;
+	background-color: Window;
+	
+	&.BuddyListPanel
+	{
+		a
+		{
+			display: block;
+			height: 24px;
+			vertical-align: middle;
+		}
+	}
+	
+	div.ChatPanelHistory
+	{
+		padding-bottom: 16px;
+		width: 100%;
+		height: 200px;
+		overflow: scroll;
+		overflow-x: hidden;
+		
+		div.ChatPanelHistoryMessage
+		{
+			display: table-row;
+			height: 64px;
+			
+			img.ChatPanelHistoryMessageAvatar
+			{
+				display: inline-block;
+				width: 48px;
+				height: 48px;
+				margin-right: 8px;
+				
+				display: table-cell;
+			}
+			div.ChatPanelHistoryMessageContent
+			{
+				display: table-cell;
+				vertical-align: top;
+			}
+		}
+	}
+	
+	div.ChatPanelTitle
+	{
+		padding: 4px;
+		
+		a
+		{
+			text-decoration: none;
+			
+			&.Title
+			{
+				color: #FFFFFF;
+				display: table-cell;
+				width: 100%;
+			}
+			&.Close
+			{
+				color: #FFFFFF;
+				display: table-cell;
+				padding-left: 4px;
+				padding-right: 4px;
+			}
+		}
+	}
+	div.ChatPanelStatus
+	{
+		color: GrayText;
+	}
+	
+	textarea.ChatPanelInput
+	{
+		display: block;
+		width: 100%;
+	}
+}

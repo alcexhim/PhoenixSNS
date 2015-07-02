@@ -1,0 +1,142 @@
+div.Chance
+{
+	background-repeat: no-repeat;
+	
+	width: 235px;
+	height: 349px;
+	
+	div.ChanceGlobe
+	{
+		background-image: url('/images/chance/bronze/kiosk_globe.png');
+		width: 174px;
+		height: 178px;
+	}
+	div.ChanceGlobeStrip
+	{
+		background-image: url('/images/chance/bronze/kiosk_globe_strip.png');
+		position: relative;
+		left: 6px;
+		width: 174px;
+		height: 32px;
+	}
+	div.ChanceGlobeOverlay
+	{
+		background-image: url('/images/chance/bronze/kiosk_globe_overlay.png');
+		position: relative;
+		top: -4px;
+		left: 22px;
+		width: 174px;
+		height: 178px;
+	}
+	a.ChanceButton
+	{
+		position: relative;
+		left: 52px;
+		height: 36px;
+		width: 118px;
+
+		display: inline-block;
+		
+		
+		background-repeat: no-repeat;
+		
+		text-decoration: none;
+		z-index: 5;
+		
+		&:focus
+		{
+			outline: 0;
+		}
+	}
+	span.ChancePrompt
+	{
+		font-weight: bold;
+		font-family: "Arial", sans-serif;
+		font-size: 6.5pt;
+		
+		position: relative;
+		left: 5px;
+		top: 30px;
+		cursor: default;
+		display: none;
+	}
+	div.ChanceControls
+	{
+		position: relative;
+		top: 47px;
+	}
+	div.ChanceEgg
+	{
+		background-image: url('/images/chance/default/kiosk_egg.png');
+		background-repeat: no-repeat;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		
+		width: 39px;
+		height: 39px;
+		border-radius: 20px;
+	}
+	div.ChanceNotification
+	{
+		font-family: "Arial", sans-serif;
+		font-weight: bold;
+		font-size: 11pt;
+		color: #FF0000;
+		width: 50%;
+		text-align: center;
+		position: relative;
+		z-index: 10;
+		
+		left: 0px;
+		top: -172px;
+		margin-left: auto;
+		margin-right: auto;
+		border: solid 2px #FF0000;
+		padding: 10px 20px 10px 20px;
+		border-radius: 8px;
+		background-color: #FFFFFF;
+		
+		overflow: hidden;
+		
+		opacity: 0.8;
+		
+		-moz-box-shadow: 3px 3px 4px #666666;
+		-webkit-box-shadow: 3px 3px 4px #666666;
+		box-shadow: 3px 3px 4px #666666;
+		
+		animation: gachaboxin 0.5s;
+		-moz-animation: gachaboxin 0.5s; /* Firefox */
+		-webkit-animation: gachaboxin 0.5s; /* Safari and Chrome */
+		-o-animation: gachaboxin 0.5s; /* Opera */
+	}
+	&.Disabled
+	{
+		width: 174px;
+		height: 150px;
+		background-color: #FFFFFF;
+		opacity: 0.6;
+	}
+}
+
+.gachaboxin-frames ()
+{
+	from
+	{
+		font-size: 4pt;
+		top: -160px;
+		width: 0px;
+		height: 0px;
+	}
+	to
+	{
+		font-size: 11pt;
+		top: -175px;
+		width: 50%;
+		height: 32px;
+	}
+}
+@keyframes gachaboxin { .gachaboxin-frames; }
+@-moz-keyframes gachaboxin { .gachaboxin-frames; }
+@-webkit-keyframes gachaboxin { .gachaboxin-frames; }
+@-o-keyframes gachaboxin { .gachaboxin-frames; }

@@ -1,0 +1,36 @@
+input[type=button]:not(.LinkButton), input[type=submit]:not(.LinkButton), a.Button
+{
+	background: linear-gradient(to bottom, @LightColor 50%, @DarkColor 100%) repeat scroll 0 0 transparent;
+	border: solid 1px @DarkColor;
+	display: inline-block;
+	
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 16px;
+	padding-right: 16px;
+	
+	margin-left: 8px;
+	margin-right: 8px;
+	
+	text-align: center;
+	vertical-align: middle;
+	
+	cursor: default;
+	color: @DarkestColor;
+	text-decoration: none;
+	
+	&:hover
+	{
+		.RaisedGradient;
+		border-color: @LightColor;
+		color: @DarkestColor;
+		text-decoration: none;
+	}
+	&:focus, &:active
+	{
+		.SunkenGradient;
+		border-color: @LightColor;
+		color: @DarkestColor;
+		text-decoration: none;
+	}
+}

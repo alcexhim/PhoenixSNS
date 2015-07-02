@@ -1,0 +1,52 @@
+body.LoginPage
+{
+	background-color: @LighterColor;
+	div.LogoAndLoginArea
+	{
+		box-shadow: 0px 0px 16px;
+		
+		background-color: #FFFFFF;
+		&>div.ActionList
+		{
+			border-top: solid 1px @LighterColor;
+		}
+	}
+}
+
+div.LoginWindow
+{
+	font-family: "Arial", sans-serif;
+	font-size: 8pt;
+	input[type=text], div.LoginWindow input[type=password]
+	{
+		border: solid 1px @DarkColor;
+		border-radius: 8px 8px 8px 8px;
+		padding: 8px 8px 8px 8px;
+		
+		background-color: @WindowBackground;
+		color: @WindowForeground;
+		
+		font-size: 18pt;
+	}
+	a
+	{
+		color: #AAAAAA;
+		text-decoration: none;
+		&:hover
+		{
+			color: #666666;
+		}
+	}
+}
+.LoginActions
+{
+	margin-top: 8px;
+	border-top: solid 1px @LighterColor;
+	font-size: 8pt;
+	/*
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 18px;
+	width: 260px;
+	*/
+}

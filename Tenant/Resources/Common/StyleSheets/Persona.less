@@ -1,0 +1,62 @@
+div.Persona
+{
+	position: absolute;
+	div.PersonaAvatarContainer
+	{
+		zoom: 0.5;
+		-moz-transform: scale(0.5);
+		-moz-transform-origin: 0 0;
+	}
+	div.PersonaTitlebar 
+	{
+		border: solid 1px #AAAAFF;
+		border-radius: 4px 4px 4px 4px;
+		padding: 4px 4px 0px 4px;
+		background-color: #EEEEEE;
+		visibility: hidden;
+		span.PersonaStatusIndicator
+		{
+			width: 8px;
+			height: 8px;
+			border-radius: 4px 4px 4px 4px;
+			background-color: #AAAAAA;
+			display: inline-block;
+		}
+		span.PersonaTitle
+		{
+			font-family: "Tahoma", sans-serif;
+			font-size: 8pt;
+			color: #000000;
+			position: relative;
+			top: -8px;
+		}
+	}
+	&:hover
+	{
+		div.PersonaTitlebar
+		{
+			visibility: visible;
+		}
+	}
+}
+
+div.PersonaChatBalloon
+{
+	position: absolute;
+	top: -64px;
+	height: 64px;
+	left: -100px;
+	width: 100px;
+	
+	font-size: 10pt;
+	background-color: #EEEEEE;
+	border: solid 2px #000000;
+	padding: 8px 8px 8px 8px;
+	display: none;
+	color: #000000;
+}
+
+img.PersonaAvatarHead
+{
+	background-image: url("/images/avatar/head.png");
+}

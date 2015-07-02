@@ -1,0 +1,16 @@
+<?php
+	use WebFX\System;
+	
+	// TODO: Copy this file into Configuration.inc.php and modify the initial settings
+	// for your own server. When you run PhoenixSNS for the first time, it will guide
+	// you through the rest of the setup process.
+
+	// Whether we should enable users to run the setup application
+	System::$Configuration["Setup.Enabled"] = true;
+
+	// The base path of the Web site
+	System::$Configuration["Application.BasePath"] = "http://www.yourdomainname.com/";
+
+	// The location of static WebFramework-related files (scripts, stylesheets, etc.)
+	System::$Configuration["WebFramework.StaticPath"] = "http://static.yourdomainname.com/";
+?>

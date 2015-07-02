@@ -1,0 +1,51 @@
+div.Toolbar, div.StatusBar
+{
+	background-color: rgba(204, 238, 255, 0.8);
+}
+
+a.ApplicationButton
+{
+	border: solid 1px transparent;
+	color: @DarkColor;
+	
+	&:hover
+	{
+		border: solid 1px @BorderColor;
+		background: linear-gradient(to bottom, @LightestColor 0%, @LighterColor 50%) repeat scroll 0 0 transparent;
+		cursor: default;
+		text-decoration: none;
+	}
+	&.Pressed
+	{
+		border: solid 1px @BorderColor;
+		background: linear-gradient(to bottom, #000000 0%, #FF6600 50%) repeat scroll 0 0 transparent;
+		border-color: #FF6600;
+		color: #000000;
+	}
+}
+div.ApplicationTitleBar
+{
+	font-size: 16pt;
+	font-weight: bold;
+	text-align: center;
+}
+div.UserControlPanel
+{
+	width: 180px;
+	span.UserIcon
+	{
+		border: solid 1px #AAAAAA;
+		border-radius: 32px;
+		width: 32px;
+		height: 32px;
+		display: inline-block;
+		
+		position: relative;
+		top: 8px;
+	}
+	span.UserName
+	{
+		position: relative;
+		top: -4px;
+	}
+}

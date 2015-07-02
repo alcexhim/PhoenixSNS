@@ -1,0 +1,49 @@
+input[type=text], input[type=password], div.Textbox
+{
+	border: solid 1px #AAAAAA;
+	background-color: @WindowBackground;
+	/* border-radius: 4px; */
+	color: @DarkColor;
+	
+	&:hover
+	{
+		border: solid 1px @DarkColor;
+	}
+	&:focus
+	{
+		border: solid 1px @DarkColor;
+		background-color: @LightLightColor;
+		box-shadow: 0px 0px 4px @WindowBackground;
+	}
+}
+div.Textbox
+{
+	input[type=text]
+	{
+		border: none 0px;
+		background-color: inherit;
+		
+		&:focus
+		{
+			box-shadow: none;
+		}
+	}
+	&:focus
+	{
+		box-shadow: 0px 0px 4px @WindowBackground;
+	}
+
+	.TextboxSelectedItem
+	{
+		background-color: #AACCFF;
+		border: 1px solid;
+		border-radius: 8px 8px 8px 8px;
+		padding: 4px;
+		margin: 2px;
+		white-space: nowrap;
+		span.TextboxSelectedItemText
+		{
+			padding-right: 8px;
+		}
+	}
+}

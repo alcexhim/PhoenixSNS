@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website>
+	<MasterPages>
+		<MasterPage xmlns="http://www.w3.org/1999/xhtml" xmlns:wfx="urn:net.alceproject.WebFX" FileName="Empty">
+			<Scripts>
+				<!-- These will all be combined into a single bundle -->
+				<Script ContentType="text/javascript" FileName="$(WebFXStaticPath)/Scripts/PrependArgument.js" />
+				<Script ContentType="text/javascript" FileName="$(WebFXStaticPath)/Scripts/WebFramework.js" />
+				<Script ContentType="text/javascript" FileName="$(WebFXStaticPath)/Scripts/Controls/Notification.js" />
+			</Scripts>
+			<StyleSheets>
+				<!-- These will all be combined into a single bundle -->
+				<StyleSheet FileName="$(WebFXStaticPath)/StyleSheets/Main.css" />
+				<StyleSheet FileName="$(WebFXStaticPath)/StyleSheets/Professional/Main.css" />
+			</StyleSheets>
+			<References>
+				<Reference TagPrefix="wfx" NamespacePath="WebFX\Controls" NamespaceURL="urn:net.alceproject.WebFX.Controls" />
+			</References>
+			<Variables>
+				<Variable Name="WebFXStaticPath" Value="http://static.alcehosting.net/dropins/WebFramework" />
+			</Variables>
+			<Content>
+				<wfx:SectionPlaceholder ID="content" />
+			</Content>
+		</MasterPage>
+		<MasterPage xmlns="http://www.w3.org/1999/xhtml" xmlns:wfx="urn:net.alceproject.WebFX" FileName="Default">
+			<Scripts>
+				<!-- These will all be combined into a single bundle -->
+				<Script ContentType="text/javascript" FileName="$(WebFXStaticPath)/Scripts/PrependArgument.js" />
+				<Script ContentType="text/javascript" FileName="$(WebFXStaticPath)/Scripts/WebFramework.js" />
+				<Script ContentType="text/javascript" FileName="$(WebFXStaticPath)/Scripts/Controls/Notification.js" />
+			</Scripts>
+			<StyleSheets>
+				<!-- These will all be combined into a single bundle -->
+				<StyleSheet FileName="$(WebFXStaticPath)/StyleSheets/Main.css" />
+				<StyleSheet FileName="$(WebFXStaticPath)/StyleSheets/Professional/Main.css" />
+			</StyleSheets>
+			<References>
+				<Reference TagPrefix="wfx" NamespacePath="WebFX\Controls" NamespaceURL="urn:net.alceproject.WebFX.Controls" />
+			</References>
+			<Variables>
+				<Variable Name="WebFXStaticPath" Value="http://static.alcehosting.net/dropins/WebFramework" />
+			</Variables>
+			<Content>
+				<div class="Page">
+					<nav class="Top">
+						<a href="#" onclick="toggleSidebarExpanded(); return false;" class="MenuButton"><i class="fa fa-bars"></i></a>
+						<wfx:Image AlternateText="PhoenixSNS" ImageUrl="~/Images/Logo.png" CssClass="Logo" />
+						<wfx:TextBox CssClass="SearchBar" SuggestionURL="~/API/Search.php?q=%1" PlaceholderText="Type to search" />
+						<div class="UserInfo">
+							<div class="DropDownButton">
+								<i class="fa fa-user"></i>
+								<img alt="" class="UserIcon" />
+								<span class="UserName">phoenixroot</span>
+								<div class="Menu DropDownMenu">
+									<a href="/account/settings.page">
+										<span class="Icon"><i class="fa fa-cogs"></i></span>
+										<span class="Text">Change Settings</span>
+									</a>
+									<a href="/account/logout.page">
+										<span class="Icon"><i class="fa fa-sign-out"></i></span>
+										<span class="Text">Log Out</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</nav>
+					<nav id="__SidebarFrame" class="Sidebar">
+						<ul>
+							<li class="Separator">Quick Start</li><li class="Button">					<a href="/">
+									<span class="Icon"><i class="fa fa-dashboard"></i></span>
+									<span class="Text">Dashboard</span>					</a>
+							</li><li class="Separator">Management</li><li class="Button">					<a href="/tenant">
+									<span class="Icon"><i class="fa fa-th-list"></i></span>
+									<span class="Text">Tenants</span><span class="Info">1</span>					</a>
+							<ul><li class="Button">					<a href="/tenant/modify/default">
+									<span class="Icon"><i class="fa fa-"></i></span>
+									<span class="Text">default</span>					</a>
+							</li></ul></li><li class="Button">					<a href="/modules">
+									<span class="Icon"><i class="fa fa-puzzle-piece"></i></span>
+									<span class="Text">Modules</span><span class="Info">7</span>					</a>
+							</li><li class="Button">					<a href="/data-centers">
+									<span class="Icon"><i class="fa fa-building-o"></i></span>
+									<span class="Text">Data Centers</span><span class="Info">1</span>					</a>
+							</li><li class="Button">					<a href="/payment-plans">
+									<span class="Icon"><i class="fa fa-money"></i></span>
+									<span class="Text">Payment Plans</span><span class="Info">4</span>					</a>
+							</li><li class="Button">					<a href="/organizations">
+									<span class="Icon"><i class="fa fa-suitcase"></i></span>
+									<span class="Text">Organizations</span><span class="Info">0</span>					</a>
+							</li><li class="Button">					<a href="/users">
+									<span class="Icon"><i class="fa fa-users"></i></span>
+									<span class="Text">Users</span><span class="Info">2</span>					</a>
+							</li><li class="Button">					<a href="/data-types">
+									<span class="Icon"><i class="fa fa-sitemap"></i></span>
+									<span class="Text">Data Types</span><span class="Info">10</span>					</a>
+							</li><li class="Button">					<a href="/tenant-types">
+									<span class="Icon"><i class="fa fa-tenant-types"></i></span>
+									<span class="Text">Tenant Types</span><span class="Info">2</span>					</a>
+							</li><li class="Separator">Help and Support</li><li class="Button">					<a href="/support/documentation">
+									<span class="Icon"><i class="fa fa-book"></i></span>
+									<span class="Text">Documentation</span>					</a>
+							</li><li class="Button">					<a href="/support/bugspray">
+									<span class="Icon"><i class="fa fa-bug"></i></span>
+									<span class="Text">Report a Bug</span>					</a>
+							</li><li class="Button">					<a href="/system-log">
+									<span class="Icon"><i class="fa fa-file-text-o"></i></span>
+									<span class="Text">System Log</span>					</a>
+							</li>
+						</ul>
+					</nav>
+					<header>
+						<h1>This is a common header</h1>
+					</header>
+					<div id="__ContentFrame" class="Content">
+						<wfx:SectionPlaceholder ID="content" />
+					</div>
+					<footer>
+						Copyright (c) 2014
+					</footer>
+				</div>
+			</Content>
+		</MasterPage>
+	</MasterPages>
+</Website>

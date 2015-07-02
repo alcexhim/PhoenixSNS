@@ -1,0 +1,54 @@
+div.Comment
+{
+	margin-top: 8px;
+	margin-bottom: 8px;
+	
+	span.CommentActions
+	{
+		font-weight: normal;
+		font-size: 10pt;
+		float: right;
+	}
+	div.CommentActions a
+	{
+		margin-left: 4px;
+		margin-right: 4px;
+		
+		border-left: solid 1px #AA0000;
+	}
+	div.CommentTitle
+	{
+		padding: 8px;
+	}
+	div.CommentContent
+	{
+		padding: 8px;
+	}
+	div.CommentInformation
+	{
+		padding: 16px 8px 8px;
+		span.PostedBy img
+		{
+			margin-top: -12px;
+			vertical-align: top;
+			&.Badge
+			{
+				vertical-align: middle;
+				position: relative;
+				top: 6px;
+			}
+		}
+	}
+	div.CommentEditor
+	{
+		display: none;
+		textarea, input[type=text]
+		{
+			width: 100%;
+		}
+	}
+	div.CommentList div.Comment
+	{
+		margin-left: 24px;
+	}
+}

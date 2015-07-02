@@ -1,0 +1,75 @@
+div.ProfilePage
+{
+	/*
+		width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	*/
+	div.ProfileActionListPane, div.ProfileContentPane
+	{
+		display: table-cell;
+		vertical-align: top;
+	}
+	div.ProfileActionListPane
+	{
+		width: 15%;
+	}
+	div.ProfileAvatarPane
+	{
+		div.ProfileAvatar
+		{
+			display: table-cell;
+		}
+		div.ProfileInformation
+		{
+			display: table-cell;
+			padding-top: 24px;
+			vertical-align: top;
+			font-size: 2em;
+		}
+	}
+}
+div.ProfileHeader
+{
+	height: 96px;
+}
+div.ProfileTitle
+{
+	border-top: solid 1px #AAAACC;
+	border-bottom: solid 1px #AAAACC;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	span.ProfileUserName
+	{
+		font-weight: bold;
+	}
+	span.ProfileControlBox
+	{
+		float: right;
+		a, input.LinkButton
+		{
+			padding-left: 4px;
+			padding-right: 4px;
+		}
+	}
+}
+table.ProfileContentLayout tr td
+{
+	vertical-align: top;
+	&.EgoSeeAll
+	{
+		vertical-align: middle;
+		text-align: center;
+	}
+}
+img.ProfileAvatarThumbnail
+{
+	width: 64px;
+	height: 64px;
+}
+div.ProfileUserContent
+{
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 242px;
+}

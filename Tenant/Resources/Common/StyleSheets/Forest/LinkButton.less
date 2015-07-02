@@ -1,0 +1,16 @@
+a, input[type=submit].LinkButton, input[type=reset].LinkButton, input[type=button].LinkButton
+{
+	color: @HyperlinkNormalColor;
+	background: transparent;
+	text-decoration: none;
+	&:hover
+	{
+		text-decoration: underline;
+		color: @HyperlinkHoverColor;
+	}
+	&[disabled="disabled"]
+	{
+		color: @DisabledTextColor !important;
+		cursor: default !important;
+	}
+}

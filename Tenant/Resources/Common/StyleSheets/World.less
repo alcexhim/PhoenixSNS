@@ -1,0 +1,92 @@
+div.World, div.WorldProgress
+{
+	width: 800px;
+	height: 600px;
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+div.World
+{
+	background-color: #00FF00;
+	background-repeat: no-repeat;
+	overflow: hidden;
+}
+div.WorldToolbar
+{
+	background-color: #EEEEEE;
+	height: 32px;
+	width: 800px;
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.WorldProgress
+{
+	display: none;
+	background-color: #000000;
+	position: relative;
+	div.ProgressBarWrapper
+	{
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		top: 50%;
+	}
+}
+
+div.WorldToolbar a
+{
+	font-size: 10pt;
+	font-family: "Tahoma", sans-serif;
+	text-decoration: none;
+	
+	display: inline-block;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	padding-bottom: 8px;
+	&:hover
+	{
+		background-color: #CCFFFF;
+	}
+}
+
+div.WorldHotspots
+{
+	position: relative;
+}
+a.WorldHotspotEntry
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 1px;
+	height: 1px;
+	display: inline-block;
+	
+	span.Title
+	{
+		visibility: hidden;
+		
+		display: block;
+		background-color: #000000;
+		color: #FFFFFF;
+		text-align: center;
+	}
+	
+	&:hover
+	{
+		/* border: solid 2px #000000; */
+		span.Title
+		{
+			visibility: visible;
+			border-radius: 4px;
+			padding: 6px 6px 6px 6px;
+			padding-right: -6px;
+		}
+	}
+}
+
+@import "World_Screen1.less";

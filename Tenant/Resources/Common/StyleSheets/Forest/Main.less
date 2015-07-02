@@ -1,0 +1,71 @@
+/* Winter theme colors */
+@LightestColor: #EEFFFF;
+@LighterColor: #CCEEFF;
+@LightLightColor: @LightestColor;
+@LightColor: #AAEEFF;
+@DarkColor: #00AACC;
+@DarkestColor: #003366;
+@BorderColor: @DarkColor;
+
+@PageBackgroundColor: #FFFFFF;
+@PageForegroundColor: @DarkestColor;
+
+@DisabledTextColor: GrayText;
+
+/* The background used in text boxes and list views */
+@WindowBackground: @LighterColor;
+@WindowTitlebarText: #000000;
+@WindowForeground: @PageForegroundColor;
+
+@MonochromeText: #AAAAAA;
+
+@HyperlinkNormalColor: @DarkColor;
+@HyperlinkHoverColor: #00CCFF;
+
+body
+{
+	background-color: @PageBackgroundColor;
+	color: @PageForegroundColor;
+}
+body, table, input, select, div
+{
+	font-family: "Open Sans Light", sans-serif;
+	font-weight: lighter;
+	font-size: 12pt;
+	line-height: 32px;
+}
+
+.RaisedGradient
+{
+	background: linear-gradient(to bottom, @LightestColor 0%, @LighterColor 50%) repeat scroll 0 0 transparent;
+}
+.RaisedGradientDark
+{
+	background: linear-gradient(to bottom, @LighterColor 0%, @LightColor 50%) repeat scroll 0 0 transparent;
+}
+.SunkenGradient
+{
+	background: linear-gradient(to bottom, @LighterColor 0%, @LightestColor 50%) repeat scroll 0 0 transparent;
+}
+
+
+@import "ActionList.less";
+@import "Application.less";
+@import "Avatar.less";
+@import "Breadcrumb.less";
+@import "Button.less";
+@import "ButtonGroup.less";
+@import "Card.less";
+@import "ChatBar.less";
+@import "CodeEditor.less";
+@import "Comment.less";
+@import "Emoticon.less";
+@import "Hovercard.less";
+@import "Login.less";
+@import "LinkButton.less";
+@import "ListBox.less";
+@import "Newsfeed.less";
+@import "Notification.less";
+@import "Panel.less";
+@import "TextBox.less";
+@import "Window.less";

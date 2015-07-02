@@ -1,0 +1,49 @@
+div.CardLayout
+{
+	div.CardSet
+	{
+		&.Left
+		{
+			display: none;
+		}
+		&.Center
+		{
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+		&.Right
+		{
+			display: none;
+		}
+		
+		div.Card
+		{
+			div.Actions
+			{
+				a
+				{
+					span.Text
+					{
+						display: none;
+					}
+				}
+				&.Horizontal
+				{
+					text-align: center;
+					a
+					{
+						padding-left: 24px;
+						padding-right: 24px;
+					}
+					span.Active
+					{
+						span.Text
+						{
+							display: none;
+						}
+					}
+				}
+			}
+		}
+	}
+}

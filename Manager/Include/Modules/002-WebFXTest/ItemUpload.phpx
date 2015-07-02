@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website>
+	<Pages>
+		<Page xmlns:wfx="urn:net.alceproject.WebFX" FileName="ItemUpload.phpx" MasterPageFileName="Default" Title="This is a test" UseCompatibleRenderingMode="false">
+			<Content>
+				<wfx:Section PlaceholderID="content">
+					<h1>Item Upload</h1>
+					<wfx:Window ID="wndUploadItem" Title="Upload Item">
+						<ContentControls>
+							blah blah
+						</ContentControls>
+						<FooterControls>
+							OK button goes here
+						</FooterControls>
+					</wfx:Window>
+				</wfx:Section>
+			</Content>
+		</Page>
+	</Pages>
+</Website>

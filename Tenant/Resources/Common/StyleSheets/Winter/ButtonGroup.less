@@ -1,0 +1,17 @@
+div.ButtonGroup a
+{
+	border: solid 1px transparent;
+	&:hover
+	{
+		background-color: #000000;
+		background: linear-gradient(to bottom, @LightestColor 0%, @LighterColor 50%) repeat scroll 0 0 transparent;
+		border-color: @BorderColor;
+		color: @DarkColor;
+	}
+	&.Selected
+	{
+		background: linear-gradient(to bottom, #000000 0%, #FF6600 50%) repeat scroll 0 0 transparent;
+		border-color: #FF6600;
+		color: #000000;
+	}
+}

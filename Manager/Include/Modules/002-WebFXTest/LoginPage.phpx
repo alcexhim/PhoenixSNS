@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website>
+	<Pages>
+		<Page xmlns:wfx="urn:net.alceproject.WebFX" FileName="LoginPage.phpx" ClassName="WebFXTest\LoginPage" MasterPageFileName="Empty" Title="This is a test" UseCompatibleRenderingMode="true">
+			<StyleSheets>
+				<!-- These will all be combined into a single bundle -->
+				<StyleSheet FileName="~/StyleSheets/Main.css" />
+			</StyleSheets>
+			<Content>
+				<wfx:Section ID="content">
+					<form method="POST">
+						<div class="LoginContainer">
+							<div class="Billboard">
+								<wfx:Image ImageUrl="~/Images/Billboard.png" AlternateText="PhoenixSNS" />
+							</div>
+							<div class="Branding">
+								Log in to <span class="ProductName">PhoenixSNS</span>
+							</div>
+							<div class="Credentials">
+								<p>PhoenixSNS Development Group - Tenant Manager Login</p>
+								<wfx:FormView>
+									<Items>
+										<wfx:FormViewItemText ID="txtUserName" Name="user_LoginID" Title="User name" PlaceholderText="User name" />
+										<wfx:FormViewItemPassword ID="txtPassword" Name="user_Password" Title="Password" PlaceholderText="Password" />
+									</Items>
+								</wfx:FormView>
+								<div class="ButtonContainer">
+									<input type="submit" value="Continue" />
+								</div>
+							</div>
+							<div class="Footer">
+								This system is property of PhoenixSNS Development Group. By accessing and using this system you are consenting to the PhoenixSNS Tenant Manager license agreement. Unauthorized use or misuse of this computer system may subject you to disciplinary action or criminal prosecution.
+							</div>
+						</div>
+					</form>
+				</wfx:Section>
+			</Content>
+		</Page>
+	</Pages>
+</Website>

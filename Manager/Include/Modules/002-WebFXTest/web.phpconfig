@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website xmlns="urn:net.alceproject.WebFX">
+	<Variables>
+		<Variable Name="WebFXStaticPath" Value="http://static.alcehosting.net/dropins/WebFramework" />
+	</Variables>
+	<References>
+		<!-- Default references applied to all pages in this Web -->
+		<Reference Prefix="wfx" Namespace="WebFX\Controls" />
+		<Reference Prefix="html" Namespace="WebFX\HTMLControls" />
+	</References>
+	<Settings>
+	</Settings>
+</Website>

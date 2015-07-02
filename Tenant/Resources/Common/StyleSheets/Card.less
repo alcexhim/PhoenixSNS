@@ -1,0 +1,95 @@
+div.CardLayout
+{
+	div.CardSet
+	{
+		&.Left
+		{
+			width: 300px;
+			position: fixed;
+		}
+		&.Center
+		{
+			padding-left: 324px;
+			padding-right: 8px;
+		}
+		&.Right
+		{
+			width: 300px;
+			position: fixed;
+			right: 0px;
+		}
+		
+		&.Left, &.Right
+		{
+			top: 50px;
+			bottom: 0px;
+			overflow: auto;
+			overflow-x: hidden;
+		}
+		
+		div.Card
+		{
+			&.Official
+			{
+				div.Title
+				{
+					background-color: #CCFFCC;
+				}
+			}
+			&.Sponsored
+			{
+				div.Title
+				{
+					background-color: #AACCFF;
+				}
+			}
+			
+			div.Title
+			{
+				i.fa
+				{
+					font-size: 32pt;
+					padding: 8px;
+					vertical-align: middle;
+					display: table-cell;
+					
+					width: 48px;
+					text-align: center;
+				}
+			}
+			div.Content
+			{
+				input, div.Textbox
+				{
+					background-color: @CardInputBackground;
+				}
+			}
+			
+			div.Title, div.Actions
+			{
+				background-color: @CardTrayBackground;
+			}
+
+			div.Actions
+			{
+				a
+				{
+					text-decoration: none;
+					color: @CardButtonForegroundInactive;
+					
+					&:hover, &.Selected
+					{
+						background-color: @CardButtonBackgroundActive;
+						color: @CardButtonForegroundActive;
+						text-decoration: none;
+					}
+					
+					span.Number
+					{
+						background-color: @CardNumberBackground; /* #00AAFF */
+					}
+				}
+			}
+		}
+	}
+}

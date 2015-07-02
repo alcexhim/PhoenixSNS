@@ -1,0 +1,124 @@
+div.LoginContainer, div.SetupContainer
+{
+	position: relative;
+	display: block;
+	
+	margin-left: auto;
+	margin-right: auto;
+	
+	margin-top: 48px;
+	width: 80%;
+	
+	input[type=text], input[type=password], input[type=number], input[type=color], textarea
+	{
+		padding: 6px;
+		font-size: 11pt;
+		font-weight: lighter;
+	}
+	div.Billboard
+	{
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		
+		img
+		{
+			width: 475px;
+		}
+	}
+	div.Branding
+	{
+		position: absolute;
+		left: 475px;
+		top: 0px;
+		height: 48px;
+		right: 25px;
+		
+		margin-left: 25px;
+		
+		border-bottom: solid 1px @BrandingDarkColor;
+		
+		font-size: 18pt;
+		
+		span.ProductName
+		{
+			color: @BrandingDarkColor;
+		}
+	}
+	div.Credentials
+	{
+		position: absolute;
+		left: 475px;
+		top: 64px;
+		right: 25px;
+		
+		margin-left: 25px;
+		
+		div.FormView
+		{
+			width: 100%;
+		}
+		
+		div.Description
+		{
+			padding-bottom: 16px;
+		}
+		div.ButtonContainer
+		{
+			text-align: right;
+		}
+		
+		label
+		{
+			display: none;
+		}
+		input[type=text], input[type=password], textarea
+		{
+			width: -moz-available;
+			margin-bottom: 8px;
+		}
+		span.ErrorMessage
+		{
+			color: #FF0000;
+		}
+	}
+	&> div.Footer
+	{
+		border-top: 1px solid #dddddd;
+		color: #aaaaaa;
+		padding-top: 8px;
+		position: absolute;
+		top: 256px;
+	}
+}
+div.SetupContainer div.Credentials label
+{
+	display: inline;
+}
+
+@media (max-width: 800px)
+{
+	div.LoginContainer, div.SetupContainer 
+	{
+		margin-top: 0px;
+		div.Branding
+		{
+			display: none;
+		}
+		div.Billboard img, div.SetupContainer div.Billboard img
+		{
+			width: 100%;
+		}
+		div.Credentials
+		{
+			left: 0px;
+			margin-left: 0px;
+			right: 0px;
+			top: 128px;
+		}
+		&> div.Footer
+		{
+			top: 330px;
+		}
+	}
+}

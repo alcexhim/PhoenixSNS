@@ -1,0 +1,41 @@
+div.ChatBar
+{
+	background-color: @LightestColor;
+	a.ChatBarButton, a.ChatBarButton.Selected
+	{
+		border: solid 1px @DarkColor;
+	}
+	a.ChatBarButton
+	{
+		color: @DarkColor;
+		.RaisedGradient;
+		&:hover
+		{
+			.RaisedGradientDark;
+			border-color: @DarkColor;
+		}
+		&.Attention
+		{
+			background: linear-gradient(to bottom, #FFFFEE 0%, #FFEECC 50%) repeat scroll 0 0 transparent;
+		}
+		&.Selected
+		{
+			.SunkenGradient;
+			border-color: @DarkColor;
+		}
+	}
+}
+div.ChatPanel
+{
+	background-color: @LightestColor;
+	color: @DarkestColor;
+	div.ChatPanelTitle
+	{
+		background-color: @DarkestColor;
+		color: #FFFFFF;
+	}
+	div.ChatPanelStatus
+	{
+		color: #AAAAAA;
+	}
+}

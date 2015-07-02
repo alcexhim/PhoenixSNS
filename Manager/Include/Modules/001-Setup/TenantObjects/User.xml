@@ -1,0 +1,35 @@
+<ObjectFX>
+	<Tenant Name="default">
+		<Object Name="User">
+				<Method Name="ValidateCredentials">
+					<Parameters>
+						<Parameter Name="username" />
+						<Parameter Name="password" />
+					</Parameters>
+					<CodeBlob>
+					<![CDATA[
+						use PhoenixSNS\Objects\Tenant;
+						use PhoenixSNS\Objects\TenantObjectMethodParameterValue;
+						use PhoenixSNS\Objects\TenantQueryParameter;
+						
+						$tenant = Tenant::GetCurrent();
+						$object = $tenant->GetObject("User");
+						
+						$salt = $object->GetMethod("GetHashForUserName")->Execute
+						(
+							new TenantObjectMethodParameterValue("username", $username)
+						);
+						
+						$pwhash = hash("sha512", $salt . $password);
+						$user = $object->GetInstance
+						(
+							new TenantQueryParameter("LoginID", $username),
+							new TenantQueryParameter("PasswordHash", $pwhash)
+						);
+						return $user;
+					]]>
+					</CodeBlob>
+				</Method>
+		</Object>
+	</Tenant>
+</ObjectFX>

@@ -1,0 +1,56 @@
+.ActionList
+{
+	*
+	{
+		font-family: "Open Sans";
+		font-weight: lighter;
+	}
+	
+	background-color: transparent;
+	
+	&>a, input[type=submit].LinkButton, input[type=reset].LinkButton, input[type=button].LinkButton
+	{
+		background: none;
+		text-decoration: none !important;
+		display: block;
+		
+		border-radius: 0px;
+		border: none 0px;
+		
+		padding: 6px;
+		
+		span.ActionTitle
+		{
+			font-size: 12pt;
+			display: block;
+			color: @DarkestColor;
+		}
+		span.ActionLink
+		{
+			font-size: 16pt;
+			display: inline;
+			color: @DarkColor;
+		}
+		
+		&:hover
+		{
+			/*
+			.RaisedGradient;
+			border: solid 1px @DarkColor;
+			*/
+			border: none 0px;
+			background: @LighterColor;
+		}
+		&.Selected
+		{
+			border: none 0px;
+			background: @DarkColor;
+			
+			/*
+			.SunkenGradient;
+			border-color: @DarkColor;
+			color: @DarkestColor;
+			*/
+		}
+	}
+}

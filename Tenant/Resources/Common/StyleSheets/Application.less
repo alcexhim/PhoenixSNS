@@ -1,0 +1,67 @@
+body
+{
+	margin: 0px;
+	margin-top: 48px;
+	margin-bottom: 32px;
+}
+div.Toolbar
+{
+	padding: 8px;
+}
+div.StatusBar
+{
+	padding: 4px;
+}
+div.ApplicationToolbar
+{
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	z-index: 1;
+}
+div.ApplicationStatusBar
+{
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	z-index: 1;
+	
+	display: table;
+	width: 100%;
+	
+	div.Left
+	{
+		display: table-cell;
+		width: 33%;
+		text-align: left;
+	}
+	div.Center
+	{
+		display: table-cell;
+		width: 33%;
+		text-align: center;
+	}
+	div.Right
+	{
+		display: table-cell;
+		width: 33%;
+		text-align: right;
+	}
+}
+a.ApplicationButton
+{
+	display: inline-block;
+	height: 32px;
+	text-align: center;
+	width: 32px;
+	text-decoration: none;
+	color: #000000;
+}
+
+form#frmSearch
+{
+	display: table-cell;
+	width: 128px;
+}

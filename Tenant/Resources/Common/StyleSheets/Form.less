@@ -1,0 +1,31 @@
+form
+{
+	display: table;
+	
+	div.Field
+	{
+		display: table-row;
+		&>*
+		{
+			display: table-cell;
+		}
+	}
+}
+
+div.FormSection
+{
+	div.FormItem
+	{
+		display: table;
+		width: 100%;
+		
+		label, input, select
+		{
+			display: table-cell;
+		}
+		label
+		{
+			width: 25%;
+		}
+	}
+}
