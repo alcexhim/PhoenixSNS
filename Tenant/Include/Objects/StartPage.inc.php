@@ -1,8 +1,6 @@
 <?php
 	namespace PhoenixSNS\Objects;
 	
-	require_once("DataFX/DataFX.inc.php");
-	
 	use WebFX\System;
 	
 	class StartPage

@@ -1,6 +1,6 @@
 <?php
 	// =============================================================================
-	// WebFX bootstrapper - loads the application modules and executes WebFX
+	// Phast bootstrapper - loads the application modules and executes Phast
 	// Copyright (C) 2013-2014  Mike Becker
     // 
 	// This program is free software: you can redistribute it and/or modify
@@ -17,32 +17,23 @@
 	// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	// =============================================================================
 	
-	// We need to get the root path of the Web site. It's usually something like
-	// /var/www/yourdomain.com.
-	global $RootPath;
-	$RootPath = dirname(__FILE__);
+	// Load the Phast content (which also include_once's the system modules and
+	// other Phast-specific stuff)
+	require_once("Phast/System.inc.php");
 	
-	// Now that we have defined the root path, load the WebFX content (which also
-	// include_once's the modules and other WebFX-specific stuff)
-	require_once("WebFX/WebFX.inc.php");
-	require_once("Include/UUID.inc.php");
-	
-	// Bring in the WebFX\System and WebFX\IncludeFile classes so we can simply refer
+	// Bring in the Phast\System and Phast\IncludeFile classes so we can simply refer
 	// to them (in this file only) as "System" and "IncludeFile", respectively, from
 	// now on
-	use WebFX\System;
-	use WebFX\IncludeFile;
+	use Phast\System;
+	use Phast\IncludeFile;
 	
-	System::$IncludeFiles[] = new IncludeFile("gd.inc.php", true);
+	// We need to set the root path of the Web site. It's usually something like
+	// /var/www/yourdomain.com.
+	System::SetApplicationPath(dirname(__FILE__));
 	
-	// Tell WebFX that this is a tenanted hosting application. This will allow us to
-	// control much of the application through Tenant Manager rather than having to
-	// continually push out code updates.
-	System::$EnableTenantedHosting = true;
-	
-	// Tell WebFX that we are ready to launch the application. This cycles through
-	// all of the modules (usually you will define your main application content in
-	// 000-Default) and executes the first module page that corresponds to the path
-	// the user is GETting.
+	// Tell Phast that we are ready to launch the application. This searches the entire
+	// directory hierarchy for Phast files, loading *.phpx files as Phast XML files and
+	// *.phpx.php files as PHP code-behind files. We may decide to use the *.ctlx extension
+	// (and its associated *.ctlx.php) for PHPX controls.
 	System::Launch();
 ?>

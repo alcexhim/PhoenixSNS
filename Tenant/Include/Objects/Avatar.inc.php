@@ -1,9 +1,12 @@
 <?php
 	namespace PhoenixSNS\Objects;
 
-	use WebFX\System;
-	use WebFX\HorizontalAlignment;
+	use Phast\System;
+	use Phast\HorizontalAlignment;
 	
+	use Phast\Data\DataSystem;
+	use PDO;
+		
 	class AvatarRenderer
 	{
 		public $Name;
@@ -127,26 +130,31 @@
 		{
 			if (!is_numeric($id)) return null;
 			
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "avatar_bases WHERE base_id = " . $id;
-			$result = $MySQL->query($query);
-			$count = $result->num_rows;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "AvatarBases WHERE base_ID = :base_ID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":base_id" => $id
+			));
+			$count = $statement->rowCount();
 			if ($count < 1) return null;
-			$values = $result->fetch_assoc();
+			$values = $statement->fetch(PDO::FETCH_ASSOC);
 			return AvatarBase::GetByAssoc($values);
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "avatar_bases";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "AvatarBases";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
-			$result = $MySQL->query($query);
-			$count = $result->num_rows;
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
+			$count = $statement->rowCount();
 			
 			$retval = array();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $result->fetch(PDO::FETCH_ASSOC);
 				$retval[] = AvatarBase::GetByAssoc($values);
 			}
 			return $retval;
@@ -154,17 +162,21 @@
 		
 		public function GetSlices($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "avatar_base_slices";
-			$query .= " WHERE base_id = " . $this->ID . " AND slice_parent_id IS NULL";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "AvatarBaseSlices";
+			$query .= " WHERE slice_BaseID = :slice_BaseID AND slice_ParentSliceID IS NULL";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			
-			$result = $MySQL->query($query);
-			$count = $result->num_rows;
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":slice_BaseID" => $this->ID
+			));
+			$count = $statement->rowCount();
 			$retval = array();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $result->fetch(PDO::FETCH_ASSOC);
 				$retval[] = AvatarBaseSlice::GetByAssoc($values);
 			}
 			return $retval;
@@ -205,29 +217,38 @@
 		{
 			if (!is_numeric($id)) return null;
 			
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "avatar_base_slices";
-			$query .= " WHERE slice_id = " . $id;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "AvatarBaseSlices";
+			$query .= " WHERE slice_ID = :slice_ID";
 			
-			$result = $MySQL->query($query);
-			$values = $result->fetch_assoc();
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":slice_ID" => $id
+			));
+			$values = $result->fetch(PDO::FETCH_ASSOC);
 			if ($result->num_rows < 1) return null;
 			return AvatarBaseSlice::GetByAssoc($values);
 		}
 		
 		public function GetSlices($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "avatar_base_slices";
-			$query .= " WHERE base_id = " . $this->Base->ID . " AND slice_parent_id = " . $this->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "AvatarBaseSlices";
+			$query .= " WHERE slice_BaseID = :slice_BaseID AND slice_ParentSliceID = :slice_ParentSliceID";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			
-			$result = $MySQL->query($query);
-			$count = $result->num_rows;
+			$statement = $pdo->prepare($query);
+			$result = $pdo->execute(array
+			(
+				":slice_BaseID" => $this->Base->ID,
+				":slice_ParentSliceID" => $this->ID
+			));
+			$count = $statement->rowCount();
 			$retval = array();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $result->fetch(PDO::FETCH_ASSOC);
 				$retval[] = AvatarBaseSlice::GetByAssoc($values);
 			}
 			return $retval;

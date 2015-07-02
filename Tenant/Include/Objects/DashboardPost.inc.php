@@ -1,7 +1,9 @@
 <?php
 	namespace PhoenixSNS\Objects;
-	use WebFX\System;
-	
+	use Phast\System;
+	use Phast\Data\DataSystem;
+	use PDO;
+		
 	class DashboardPost
 	{
 		public $ID;
@@ -34,18 +36,19 @@
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPosts";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPosts";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$query .= " ORDER BY post_CreationTimestamp DESC";
 			
 			$retval = array();
-			$result = $MySQL->query($query);
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPost::GetByAssoc($values);
 			}
 			return $retval;
@@ -53,51 +56,66 @@
 		
 		public function GetActions($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostActions";
-			$query .= " WHERE action_PostID = " . $this->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostActions";
+			$query .= " WHERE action_PostID = :action_PostID";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
+			
+			$statement = $pdo->prepare($query);
+			
 			$retval = array();
-			$result = $MySQL->query($query);
+			$result = $statement->execute(array
+			(
+				":action_PostID" => $this->ID
+			));
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostAction::GetByAssoc($values);
 			}
 			return $retval;
 		}
 		public function GetComments($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostComments";
-			$query .= " WHERE comment_PostID = " . $this->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostComments";
+			$query .= " WHERE comment_PostID = :comment_PostID";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":comment_PostID" => $this->ID
+			));
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostComment::GetByAssoc($values);
 			}
 			return $retval;
 		}
 		public function GetShares($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostShares";
-			$query .= " WHERE share_PostID = " . $this->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostShares";
+			$query .= " WHERE share_PostID = :share_PostID";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":share_PostID" => $this->ID
+			));
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostShare::GetByAssoc($values);
 			}
 			return $retval;
@@ -105,29 +123,37 @@
 		
 		public function CountComments()
 		{
-			global $MySQL;
-			$query = "SELECT COUNT(*) FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostComments";
-			$query .= " WHERE comment_PostID = " . $this->ID;
-			$result = $MySQL->query($query);
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT COUNT(*) FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostComments";
+			$query .= " WHERE comment_PostID = :comment_PostID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":comment_PostID" => $this->ID
+			));
 			$retval = 0;
 			if ($result !== false)
 			{
-				$values = $result->fetch_array();
+				$values = $statement->fetch(PDO::FETCH_NUM);
 				$retval = $values[0];
 			}
 			return $retval;
 		}
 		public function CountShares()
 		{
-			global $MySQL;
-			$query = "SELECT COUNT(*) FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostShares";
-			$query .= " WHERE share_PostID = " . $this->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT COUNT(*) FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostShares";
+			$query .= " WHERE share_PostID = :share_PostID";
+			$statement = $pdo->prepare($query);
 			$retval = array();
-			$result = $MySQL->query($query);
+			$result = $statement->execute(array
+			(
+				":share_PostID" => $this->ID
+			));
 			$retval = 0;
 			if ($result !== false)
 			{
-				$values = $result->fetch_array();
+				$values = $statement->fetch(PDO::FETCH_NUM);
 				$retval = $values[0];
 			}
 			return $retval;
@@ -135,17 +161,22 @@
 		
 		public function GetImpressions($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostImpressions";
-			$query .= " WHERE impression_PostID = " . $this->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostImpressions";
+			$query .= " WHERE impression_PostID = :impression_PostID";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":impression_PostID" => $this->ID
+			));
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostImpression::GetByAssoc($values);
 			}
 			return $retval;
@@ -171,16 +202,17 @@
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostActions";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostActions";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostAction::GetByAssoc($values);
 			}
 			return $retval;
@@ -210,16 +242,17 @@
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostComments";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostComments";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostComment::GetByAssoc($values);
 			}
 			return $retval;
@@ -243,16 +276,17 @@
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostShares";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostShares";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostShare::GetByAssoc($values);
 			}
 			return $retval;
@@ -274,16 +308,17 @@
 		}
 		public static function Get($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "DashboardPostImpressions";
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "DashboardPostImpressions";
 			if (is_numeric($max)) $query .= " LIMIT " . $max;
 			$retval = array();
-			$result = $MySQL->query($query);
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
 			if ($result === false) return $retval;
-			$count = $result->num_rows;
+			$count = $statement->rowCount();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = DashboardPostImpression::GetByAssoc($values);
 			}
 			return $retval;

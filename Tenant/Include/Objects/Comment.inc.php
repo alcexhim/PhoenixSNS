@@ -1,6 +1,9 @@
 <?php
 	namespace PhoenixSNS\Objects;
-	use WebFX\System;
+	
+	use Phast\System;
+	use Phast\Data\DataSystem;
+	use PDO;
 	
 	class Comment
 	{
@@ -14,13 +17,20 @@
 		
 		protected function GetCommentTableName()
 		{
-			return "comments";
+			return "Comments";
 		}
+		
 		public function Update()
 		{
-			global $MySQL;
-			$query = "UPDATE " . System::$Configuration["Database.TablePrefix"] . $this->GetCommentTableName() . " SET comment_title = '" . $MySQL->real_escape_string($this->Title) . "', comment_content = '" . $MySQL->real_escape_string($this->Content) . "' WHERE comment_id = " . $this->ID;
-			$result = $MySQL->query($query);
+			$pdo = DataSystem::GetPDO();
+			$query = "UPDATE " . System::GetConfigurationValue("Database.TablePrefix") . $this->GetCommentTableName() . " SET comment_Title = :comment_Title, comment_Content = :comment_Content WHERE comment_ID = :comment_ID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":comment_Title" => $this->Title,
+				":comment_Content" => $this->Content,
+				":comment_ID" => $this->ID
+			));
 			return $result;
 		}
 		

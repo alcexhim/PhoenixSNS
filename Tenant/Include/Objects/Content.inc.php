@@ -1,8 +1,10 @@
 <?php
 	namespace PhoenixSNS\Objects;
 	
-	use WebFX\System;
-	
+	use Phast\System;
+	use Phast\Data\DataSystem;
+	use PDO;
+		
 	class Content
 	{
 		public $Language;
@@ -13,17 +15,18 @@
 		
 		public static function Create($path, $title, $content)
 		{
-			global $MySQL;
-			$query = "INSERT INTO " . System::$Configuration["Database.TablePrefix"] . "contents (content_path, content_title, content_content, content_creator_id, content_creator_timestamp) VALUES (" .
-				"'" . $MySQL->real_escape_string($path) . "', " .
-				"'" . $MySQL->real_escape_string($title) . "', " .
-				"'" . $MySQL->real_escape_string($content) . "', " .
-				User::GetCurrent()->ID . ", " .
-				"NOW()" .
-				")";
-			
-			$result = $MySQL->query($query);
-			return ($MySQL->errno == 0);
+			$pdo = DataSystem::GetPDO();
+			$query = "INSERT INTO " . System::GetConfigurationValue("Database.TablePrefix") . "Contents (content_Path, content_Title, content_Content, content_CreationUserID, content_CreationTimestamp) VALUES (" .
+				":content_Path, :content_Title, :content_Content, :content_CreationUserID, NOW())";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":content_Path" => $path,
+				":content_Title" => $title,
+				":content_Content" => $content,
+				":content_CreationUserID" => User::GetCurrent()->ID
+			));
+			return ($result !== false);
 		}
 		public static function GetByAssoc($values)
 		{
@@ -39,42 +42,61 @@
 		}
 		public static function GetByPath($path)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "contents WHERE content_path = '" . $MySQL->real_escape_string($path) . "' AND content_language_id = " . Language::GetCurrent()->ID;
-			$result = $MySQL->query($query);
-			if ($result->num_rows < 1) return null;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Contents WHERE content_Path = :content_Path AND content_LanguageID = :content_LanguageID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":content_Path" => $path,
+				":content_LanguageID" => Language::GetCurrent()->ID
+			));
+			if ($statement->rowCount() < 1) return null;
 			
-			$values = $result->fetch_assoc();
+			$values = $statement->fetch(PDO::FETCH_ASSOC);
 			return Content::GetByAssoc($values);
 		}
 		public static function Enumerate($max = null)
 		{
-			global $MySQL;
-			$query = "SELECT * FROM " . System::$Configuration["Database.TablePrefix"] . "contents";
-			$result = $MySQL->query($query);
-			$count = $result->num_rows;
+			$pdo = DataSystem::GetPDO();
+			$query = "SELECT * FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Contents";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute();
+			$count = $statement->rowCount();
 			$retval = array();
 			for ($i = 0; $i < $count; $i++)
 			{
-				$values = $result->fetch_assoc();
+				$values = $statement->fetch(PDO::FETCH_ASSOC);
 				$retval[] = Content::GetByAssoc($values);
 			}
 			return $retval;
 		}
 		
-		public function Update($path, $title, $content)
+		public function Update()
 		{
-			global $MySQL;
-			$query = "UPDATE " . System::$Configuration["Database.TablePrefix"] . "contents SET content_path = '" . $MySQL->real_escape_string($path) . "', content_title = '" . $MySQL->real_escape_string($title) . "', content_content = '" . $MySQL->real_escape_string($content) . "' WHERE content_path = '" . $MySQL->real_escape_string($this->Path) . "' AND content_language_id = " . $this->Language->ID;
+			$pdo = DataSystem::GetPDO();
+			$query = "UPDATE " . System::GetConfigurationValue("Database.TablePrefix") . "Contents SET content_Path = :content_Path, content_Title = :content_Title, content_Content = :content_Content WHERE content_Path = :content_Path AND content_LanguageID = :content_LanguageID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":content_Path" => $this->Path,
+				":content_Title" => $this->Title,
+				":content_Content" => $this->Content,
+				":content_LanguageID" => $this->Language->ID
+			));
 			$result = $MySQL->query($query);
 			return ($MySQL->errno == 0);
 		}
 		public function Delete()
 		{
-			global $MySQL;
-			$query = "DELETE FROM " . System::$Configuration["Database.TablePrefix"] . "contents WHERE content_path = '" . $MySQL->real_escape_string($this->Path) . "' AND content_language_id = " . $this->Language->ID;
-			$result = $MySQL->query($query);
-			return ($MySQL->errno == 0);
+			$pdo = DataSystem::GetPDO();
+			$query = "DELETE FROM " . System::GetConfigurationValue("Database.TablePrefix") . "Contents WHERE content_Path = :content_Path AND content_LanguageID = :content_LanguageID";
+			$statement = $pdo->prepare($query);
+			$result = $statement->execute(array
+			(
+				":content_Path" => $this->Path,
+				":content_LanguageID" => $this->Language->ID
+			));
+			return ($result !== false);
 		}
 	}
 ?>
