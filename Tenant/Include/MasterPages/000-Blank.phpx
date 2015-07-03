@@ -3,10 +3,14 @@
 	<MasterPages>
 		<MasterPage FileName="Blank">
 			<StyleSheets>
-				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/Main.css" />
+				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/Strata/Main.css" />
 			</StyleSheets>
+			<References>
+				<Reference TagPrefix="wfx" NamespacePath="Phast\WebControls" />
+				<Reference TagPrefix="html" NamespacePath="Phast\HTMLControls" />
+			</References>
 			<Content>
-				
+				<wfx:SectionPlaceholder ID="Content" />
 			</Content>
 		</MasterPage>
 	</MasterPages>
