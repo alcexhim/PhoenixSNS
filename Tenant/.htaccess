@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # Do not remove this line, otherwise mod_rewrite rules will stop working
-RewriteBase /
+# RewriteBase /
 
 RewriteRule ^StyleSheets/(.*)\.css$ lessc.php?filename=$1 [PT,L,QSA]
 
