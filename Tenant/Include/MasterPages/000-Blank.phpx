@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website>
+	<MasterPages>
+		<MasterPage FileName="Blank">
+			<StyleSheets>
+				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/Main.css" />
+			</StyleSheets>
+			<Content>
+				
+			</Content>
+		</MasterPage>
+	</MasterPages>
+</Website>
