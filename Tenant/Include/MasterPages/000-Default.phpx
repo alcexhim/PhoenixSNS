@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website>
+	<MasterPages>
+		<MasterPage FileName="Default">
+			<StyleSheets>
+				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/$(Configuration:Application.Theme)/Main.css" />
+			</StyleSheets>
+			<References>
+				<Reference TagPrefix="wfx" NamespacePath="Phast\WebControls" />
+				<Reference TagPrefix="html" NamespacePath="Phast\HTMLControls" />
+			</References>
+			<Content>
+				<wfx:SectionPlaceholder ID="Content" />
+			</Content>
+		</MasterPage>
+	</MasterPages>
+</Website>
