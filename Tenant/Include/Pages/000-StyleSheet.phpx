@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Website>
+	<Pages>
+		<Page FileName="Resources/$(BundleName)/StyleSheet" CodeBehindClassName="PhoenixSNS\Tenant\Pages\StyleSheetPage"></Page>
+	</Pages>
+</Website>
