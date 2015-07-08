@@ -1,10 +1,15 @@
 <?php
-	namespace PhoenixSNS\Controls;
+	namespace PhoenixSNS\WebControls;
 	
-	use WebFX\WebControl;
-	use WebFX\System;
+	use Phast\WebControl;
+	use Phast\System;
+	use Phast\Enumeration;
 	
-	\Enum::Create("PhoenixSNS\\Controls\ChatBarPosition", "Top", "Bottom");
+	class ChatBarPosition extends Enumeration
+	{
+		const Top = 1;
+		const Bottom = 2;
+	}
 	
 	class ChatPanelMessage
 	{

@@ -1,5 +1,7 @@
 <?php
-	use WebFX\WebControl;
+	namespace PhoenixSNS\WebControls;
+	
+	use Phast\WebControl;
 	
 	class TicketDispenser extends WebControl
 	{

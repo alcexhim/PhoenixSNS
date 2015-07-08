@@ -1,4 +1,6 @@
 <?php
+	namespace PhoenixSNS\WebControls;
+	
 	class RandomItemKiosk
 	{
 		public $Name;

@@ -1,6 +1,6 @@
 <?php
-	namespace PhoenixSNS\Controls;
-	use WebFX\WebControl;
+	namespace PhoenixSNS\WebControls;
+	use Phast\WebControl;
 	
 	class Hovercard extends WebControl
 	{

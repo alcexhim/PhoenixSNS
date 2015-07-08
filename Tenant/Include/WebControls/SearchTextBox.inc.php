@@ -1,8 +1,8 @@
 <?php
-	namespace PhoenixSNS\Controls;
+	namespace PhoenixSNS\WebControls;
 	
-	use WebFX\Controls\TextBox;
-	use WebFX\System;
+	use Phast\WebControls\TextBox;
+	use Phast\System;
 	
 	class SearchTextBox extends TextBox
 	{
