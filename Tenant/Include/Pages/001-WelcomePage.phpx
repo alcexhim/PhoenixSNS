@@ -1,0 +1,38 @@
+<Website>
+	<Pages>
+		<Page FileName="welcome" MasterPageFileName="Blank">
+			<Content>
+				<wfx:Section PlaceholderID="Content">
+					<div style="height: 100%;">
+						<div class="WelcomeContainer">
+							<div class="Title">Your world. Your way.</div>
+							<wfx:FormView ID="fvLogin">
+								<Items>
+									<wfx:FormViewItemText Title="Login name" />
+									<wfx:FormViewItemPassword Title="Password" />
+								</Items>
+							</wfx:FormView>
+							<div class="Footer">
+								<wfx:Button ID="cmdLogin" Text="Log In" />
+								<wfx:Button ID="cmdLogin" Text="Register Now" />
+							</div>
+						</div>
+					</div>
+					<div style="height: 100%;">
+						<h1>What's new in PhoenixSNS</h1>
+						<h3>Members</h3>
+						<p>
+							Members can add others as friends.
+						</p>
+						<h3>Brands</h3>
+						<p>
+							Brands are the cornerstone of enabling our community members to contribute their own designs and ideas to the community. When you
+							establish a Brand (an initial cost of <phoenix:ResourceReference Type="Silver" Value="10000" />), you earn 20% of the profits made
+							from selling items of that brand.
+						</p>
+					</div>
+				</wfx:Section>
+			</Content>
+		</Page>
+	</Pages>
+</Website>
