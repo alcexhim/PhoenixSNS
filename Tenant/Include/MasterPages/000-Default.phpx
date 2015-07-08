@@ -4,13 +4,21 @@
 		<MasterPage FileName="Default">
 			<StyleSheets>
 				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/$(Configuration:Application.Theme)/Main.css" />
+				<StyleSheet FileName="~/Resources/$(Configuration:Application.BundleName)/StyleSheet" />
 			</StyleSheets>
 			<References>
 				<Reference TagPrefix="wfx" NamespacePath="Phast\WebControls" />
 				<Reference TagPrefix="html" NamespacePath="Phast\HTMLControls" />
+				<Reference TagPrefix="phoenix" NamespacePath="PhoenixSNS\WebControls" />
 			</References>
 			<Content>
-				<wfx:SectionPlaceholder ID="Content" />
+				<nav class="Top">
+					<a href="#">Log in</a> or <a href="#">sign up</a> now!
+				</nav>
+				<div class="Content">
+					<wfx:SectionPlaceholder ID="Content" />
+				</div>
+				<footer>Copyright &copy; 2015 PhoenixSNS Development Group</footer>
 			</Content>
 		</MasterPage>
 	</MasterPages>

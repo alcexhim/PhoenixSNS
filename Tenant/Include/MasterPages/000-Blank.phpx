@@ -3,11 +3,13 @@
 	<MasterPages>
 		<MasterPage FileName="Blank">
 			<StyleSheets>
-				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/Strata/Main.css" />
+				<StyleSheet FileName="$(Configuration:System.StaticPath)/StyleSheets/$(Configuration:Application.Theme)/Main.css" />
+				<StyleSheet FileName="~/Resources/$(Configuration:Application.BundleName)/StyleSheet" />
 			</StyleSheets>
 			<References>
 				<Reference TagPrefix="wfx" NamespacePath="Phast\WebControls" />
 				<Reference TagPrefix="html" NamespacePath="Phast\HTMLControls" />
+				<Reference TagPrefix="phoenix" NamespacePath="PhoenixSNS\WebControls" />
 			</References>
 			<Content>
 				<wfx:SectionPlaceholder ID="Content" />
