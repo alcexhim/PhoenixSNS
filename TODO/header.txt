@@ -1,0 +1,16 @@
+PhoenixSNS header
+
+	Desktop
+	
+	[ = ] PhoenixSNS				[ Apps ] [ Reqs ] [ Msgs ] [ Notif ]
+	
+		In Desktop mode, Preferred Applications (default Requests, Messages, Notifications) are displayed to the right of
+		the Apps button. Preferred Applications are not visible in Mobile mode.
+	
+	Mobile
+	
+	[ = ] PhoenixSNS	[ Apps ]
+	
+		In Mobile mode, notifications for apps are represented by a highlighted Apps button; clicking on Apps button displays
+		a popup menu with buttons for each App and shows individual app notification counts as badges on the button for the App.
+		

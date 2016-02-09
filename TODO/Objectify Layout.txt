@@ -1,0 +1,77 @@
+Objectify Types used in Psychatica
+==================================
+
+object	Size
+	property	Title			:	Multiple Instance <Language String>	The title of this Size.
+	property	Minimum Width			:	Number		Width of this Size in pixels
+	property	Minimum Height			:	Number		Height of this Size in pixels
+	property	Maximum Width
+	property	Maximum Height
+	
+	instance	Desktop
+		Minimum Width = 1024
+		Minimum Height = 768
+	instance	Tablet
+		Minimum Width = 600
+		Minimum Height = 800
+
+object	Image				Represents an image that can have multiple representations of data.
+	property	Image Data		:	Multiple Instance<Image Data>	The image data(s) for this image.
+	
+object Image Data			Represents an image file uploaded to the system.
+	property	Sizes			:	Multiple Instance <Size>		The size(s) this Image Data may be displayed at before looking for a better Image Data.
+	
+	property	Image Data Type	:	Image Type	Whether the data represents a raster or vector graphic image.
+	property	Image Data		:	Binary		The actual image data.
+
+object	Image Data Type
+	instance	Raster		The image file is a raster graphics file in Portable Network Graphics (PNG) format.
+	instance	Vector		The image file is a vector graphics file in Scalable Vector Graphics (SVG) format.
+	
+------
+PLACES
+------
+
+object	Place
+	inherits	Instance Titleable Object
+	property	Avatars				:	Multiple Instance <Avatar>				The Avatars currently inhabiting this Place.
+		This is a calculated property retrieved from calculating which Avatars are currently residing in which Places.
+		( SELECT all `Avatar`	where `Current Place` = this )
+
+------------------	
+REAL MONEY TRADING
+------------------
+
+object	RMT Exchange Rate	Exchange rate for Real Money Trading
+	inherits	Instance Titleable Object
+	property	Source Amount		:	Multiple Instance <RMT Amount>			The source amount(s) in various RMT currencies for this transaction.
+	property	Destination Amount	:	Number									The number of units of the associated Resource to grant during an RMT transaction.
+	display-string	`Destination Amount`, " for ", `Source Amount`
+	
+object	RMT Policy		Real money trading policy applied to Resources
+	property	RMT Exchange Rates	:	Multiple Instance <RMT Exchange Rate>	The exchange rate(s) defined for this policy.
+	instance	RMT Policy for Gold Resource
+		property	RMT Exchange Rates
+			instance	15000 for $20
+				property	Source Amount	20.00, USD
+				property	Destination Amount	15000
+			instance	5000 for $10
+				property	Source Amount	10.00, USD
+				property	Destination Amount	5000
+			instance	1000 for $5
+				property	Source Amount	5.00, USD
+				property	Destination Amount	1000
+			instance	100 for $1
+				property	Source Amount	1.00, USD
+				property	Destination Amount	100
+
+object	Resource		Virtual currency
+	property	RMT Policy		:	Single Instance <RMT Policy>		The Real Money Trading (RMT) policy applied to this currency.
+	instance	Gold
+		property	RMT Policy		Policy for Gold Resource
+	instance	Silver
+		property	RMT Policy		(empty)
+	
+object	Avatar			A single User can have many Avatars (they may need to buy them)
+	property	Title			:	Multiple Instance <Language String>	should this be translatable as it's not really one of -our- UI objects?
+	

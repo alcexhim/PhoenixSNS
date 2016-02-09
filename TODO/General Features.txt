@@ -1,0 +1,272 @@
+Last updated 2014-11-20 by alcexhim
+Right-click item: display context menu (WebFX "Popup" object)
+
+	* Show Object Properties
+
+<?php
+	$contextMenu = new ContextMenu("mnuObjectCTXMenu");
+	$contextMenu->Items[] = new MenuItem("mnuObjectCTXMenuShowObjectProperties", "Show Object Properties");
+	$control->ContextMenu = $contextMenu;
+?>
+
+Last updated 2014-11-20 by alcexhim
+ObjectFX: "View Object History"
+	Tracks history of changes made to a particular object
+	Additional table in database:
+		phoenix_TenantObjectJournals
+			journal_ID							INT			primary key, auto increment
+			journal_ObjectID					INT			reference to object
+			journal_CreationTimestamp			DATETIME	
+			journal_CreationUserID				INT			reference to phoenix_Users::ID
+			journal_Description					LONGTEXT	comments
+		phoenix_TenantObjectJournalEntries
+			entry_JournalID						INT			reference to phoenix_TenantObjectJournals::ID
+			entry_PropertyID					INT			reference to phoenix_TenantObjectProperties::ID
+			entry_PropertyValue					LONGBLOB	new property value
+			
+	$object->BeginJournal(description);		// opens a new journal with the given description; property changes will now be recorded
+	$object->SetPropertyValue(...);			// this will be recorded in the currently-open journal (if open)
+	$object->EndJournal();					// closes the currently-open journal (if open)
+
+Last updated 2014-11-03 by alcexhim
+ObjectFX: Organizations and user security privileges
+	Users and tenants can be associated with one or more organizations
+	Security can be applied so that particular users only see certain tenants/organizations/etc.
+
+Last updated 2014-04-11 by alcexhim
+
+Data types:
+
+	ID, Name, Description, etc. are all fine and dandy.
+	
+	EncoderCodeBlob takes as input the object value and outputs the serialized LONGBLOB that will be stored in the database.
+	DecoderCodeBlob takes as input the LONGBLOB stored in the database and outputs an object generated from the deserialization.
+	ColumnRendererCodeBlob takes as input the property value and outputs the HTML code to display the value in a column of a table. If not specified
+		the default codeblob outputs the property value exactly as it is stored in the LONGBLOB in the database.
+		
+	EditorRendererCodeBlob takes as input the property value and outputs the HTML code to display an editor
+
+MultipleInstanceProperty (DataType -4):
+	Property::Value is now an array of all instances selected in this MultipleInstanceProperty
+		
+		SELECT propval_ValueInstanceID FROM phoenix_TenantObjectPropertyValueInstances WHERE propval_InstanceID = ... AND propval_PropertyID  = ... 
+		
+		It's stored in the table like so:
+			PropertyValue =
+				<ObjectID>,<ObjectID>:<InstanceID>,<InstanceID>,<InstanceID>, ...
+				where	ObjectID is valid object types for this selection
+						InstanceID are the IDs of the selected instances
+		
+		EncoderCodeBlob (returns a LONGBLOB)
+			$retval = "";
+			$count = count($input->ValidObjects);
+			for ($i = 0; $i < $count; $i++)
+			{
+				$instance = $input->ValidObjects[$i];
+				$retval .= $instance->ID;
+				if ($i < $count - 1) $retval .= ",";
+			}
+			$retval .= ":";
+			
+			$count = count($input->Instances);
+			for ($i = 0; $i < $count; $i++)
+			{
+				$instance = $input->Instances[$i];
+				$retval .= $instance->ID;
+				if ($i < $count - 1) $retval .= ",";
+			}
+			return $retval;
+			
+		DecoderCodeBlob (returns a MultipleInstanceProperty object):
+			$retval = new MultipleInstanceProperty();
+			$values = explode($input, ":");
+			
+			$validObjects = explode($values[0], ",");
+			$instances = explode($values[1], ",");
+			
+			foreach ($validObjects as $objectID)
+			{
+				$object = TenantObject::GetByID($objectID);
+				$retval->ValidObjects[] = $object;
+			}
+			foreach ($instances as $instanceID)
+			{
+				$instance = TenantObjectInstance::GetByID($instanceID);
+				$retval->Instances[] = $instance;
+			}
+			return $retval;
+
+SingleInstanceProperty (DataType -3):
+	GetInstance()
+		Gets the object instance stored in this SingleInstanceProperty.
+		
+		It's stored in the table like so:
+			PropertyValue =
+				<ObjectID>:<InstanceID>
+		
+		EncoderCodeBlob (returns a LONGBLOB)
+			$retval = "";
+			$count = count($input->ValidObjects);
+			for ($i = 0; $i < $count; $i++)
+			{
+				$instance = $input->ValidObjects[$i];
+				$retval .= $instance->ID;
+				if ($i < $count - 1) $retval .= ",";
+			}
+			$retval .= ":";
+			$retval .= $input->Instance->ID;
+			return $retval;
+			
+		DecoderCodeBlob (returns a SingleInstanceProperty object):
+			$retval = new SingleInstanceProperty();
+			$values = explode($input, ":");
+			
+			$validObjects = explode($values[0], ",");
+			$instance = $values[1];
+			
+			foreach ($validObjects as $objectID)
+			{
+				$object = TenantObject::GetByID($objectID);
+				$retval->ValidObjects[] = $object;
+			}
+			$retval->Instance = $instance;
+			return $retval;
+
+================
+World
+================
+Water areas - allow people to buy Boats and travel on water (but don't allow walk on water)
+Boats cost 500 silver (or the equivalent price in gold) + 10 wood
+
+Under the new ObjectFX system, this might look like:
+
+	// to fetch all resources types:
+	$resourceTypes = $tenant->GetObject("ResourceType")->GetInstances();
+	
+	// establish a way to reliably determine the current user: $tenant->GetObject("User")->GetInstance(array(user name, password...))
+	// it can be quite a load to type over and over, there really should be a better way to fetch this type of data
+	// maybe $tenant->GetProperty("CurrentUser") would return a SingleInstanceProperty of RelatedObject: User ??? ;)
+	// (this is actually a good idea, implement this ^^^ )
+	
+	// to implement SingleInstanceProperty and MultipleInstanceProperty:
+	// DataType would be set to an integer constant (SingleInstanceProperty = 2, MultipleInstanceProperty = 3?)
+	// Value would be set to the InstanceID of the single instance or a comma-separated list of InstanceIDs for the multiple instance
+
+	$resources = $tenant->GetObject("User")->GetProperty("Resources");
+	// Resources property returns a MultipleInstanceProperty with the RelatedObject: Resource
+	// thus, $resources->RelatedObject returns a value of object type $tenant->GetObject("Resource");
+	
+	$count = $resources->CountInstances();
+	for ($i = 0; $i < $count; $i++)
+	{
+		// get the i'th instance in this collection
+		$rsrc = $resources->GetInstance($i);
+		
+		// what resource type is it?
+		$rval = $rsrc->GetProperty("ResourceType")->Value;
+		$rval = $rsrc->GetProperty("Amount")->Value;
+	}
+	
+	// how are ResourceTransactions going to be handled by ObjectFX?
+	
+	$transactions = $tenant->GetObject("ResourceTransaction")->GetInstances();
+	foreach ($transactions as $transaction)
+	{
+		$rsndr = $transaction->GetProperty("AffectedUser");			// SingleInstanceProperty pointing to the user affected by the transaction
+		$rrelt = $transaction->GetProperty("RelatedTransaction");	// SingleInstanceProperty pointing to the related transaction (deposit/withdrawal) if applicable (or empty if the
+																		transaction did not update another user's inventory)
+																		
+		$ritms = $transaction->GetProperty("Items");				// MultipleInstanceProperty pointing to a list of transaction items covered by this transaction:
+		foreach ($ritms as $item)
+		{
+			$rtype = $item->GetProperty("TransactableObjectType")	// type of TransactableObject (Resource, TradableItem, etc.) affected by this transaction
+			$ramnt = $item->GetProperty("Amount");					// amount of transaction (pos/neg)
+		}
+	}
+		
+================
+Resource Manager
+================
+Resources will be tracked by transactions.
+
+$count = MarketResource::CountByUser($user, MarketResourceType::GetByID(1));
+
+Avatar Builder
+==============
+A visual interface for creating avatars and managing their associated slices. Currently the avatar works like this:
+1. Base definition
+2. View(s) definition for each base
+3. Slice(s) definition for each view
+
+Thus an item MUST have AT LEAST ONE image associated with each slice for each view of a particular base in order to be classified as
+"compatible" with that base. The Market Builder (described later in this document) will enforce this requirement.
+
+As of right now we are still working under the assumption that the Avatar engine will composite avatar images and animations based on
+static images. If we end up going to the SVG format for the entire avatar, things may become a lot easier.
+
+Market Builder
+==============
+A 3-step process:
+1. Create item definition
+2. Upload item images
+3. Configure item image alignment and other properties
+
+Add a RibbonCommandButton to the Ribbon for "Item Audit" - displays a list of all items that are defined but do not yet have images
+
+Market Builder will be Ribbon-based, and accessible independently of the admin panel for non-admin users to create items
+Default location for Market Builder: ~/market/builder
+Ribbon will provide the checkbox option of publishing items/gacha/etc. as official
+	> Only if user has the PublishOfficialMarketItems privilege
+	> OR if user is super admin (obviously)
+If items are not officially published, they will appear in user's personal Market area on their profile.
+
+Market Builder MUST support item management. Market Builder SHOULD support chance, brand, and pose management.
+
+Hotspot randomness
+==================
+A la Heroes of Might and Magic II, develop a system whereby hotspots can trigger server-side events such as granting a random
+amount of resource (example 500-1500 Silver) to the user who activates the trigger. Triggers should be able to have the following
+characteristics:
+	Can be limited to a certain timeframe (for example, during a campaign)
+	Aside from the timeframe, can also disappear after activation for a particular user, or for everyone (whoever finds first will win)
+	After disappearance can configure respawn time (after 30 minutes, after an hour, after another hotspot is triggered, etc.)
+	
+Triggers
+========
+Similar to hotspots, triggers can be placed throughout a particular Place so that whenever a particular character enters the trigger
+space it is activated. Hotspots are simply different because they require a user to manually activate their action (e.g. with mouse click)
+whereas triggers will automatically activate whenever an avatar enters their range.
+
+World
+=====
+Right now progress is currently halted on World until the Avatar Builder and Market Builder are completed. Avatar Builder and Market Builder
+are requirements in order to get into the world (at least Avatar Builder is) because without the avatar you can't explore the world, and without
+the market your avatar would be buck-naked. So there.
+
+Conditional Actions
+===================
+
+	Activates the specified actions on the server when the specified conditions are met. Conditions are checked
+	when any event causes the related condition to update (i.e. such as a user login, which modifies user last
+	login date).
+	
+	This may necessitate the use of ObjectFX for simplified object management.
+
+		 --- Conditions ----------------------------------------------------------------
+		/																				\
+		|	[+]		Condition				Comparison			Value	Next condition	|
+		|	=======	======================= =================== ======= ==============	|
+		|	[+][-]	User activity points	[ Greater than  v ]	100		[ Or       v ]  |
+		|	[+][-]	Days registered			[ Greater than  v ]	5		[          v ]	|
+		|																				|
+		\-------------------------------------------------------------------------------/
+	
+		 --- Actions -------------------------------------------------------
+		/																	\
+		|	Action					Prompt user								|
+		|	======================= =============== 						|
+		|	Give user 500 credits	[ No        v ]							|
+		|																	|
+		\-------------------------------------------------------------------/
+		
+	For now, just use built-in tracking functionality for providing user rewards.
