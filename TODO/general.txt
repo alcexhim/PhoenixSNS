@@ -252,20 +252,20 @@ Conditional Actions
 	
 	This may necessitate the use of ObjectFX for simplified object management.
 
-		 --- Conditions ----------------------------------------------------
-		/																	\
-		|	Condition				Comparison		Value	Next condition	|
-		|	======================= =============== ======= ==============	|
-		|	User activity points	Greater than	100		Or				|
-		|	Days registered			Greater than	5						|
-		|																	|
-		\-------------------------------------------------------------------/
+		 --- Conditions ----------------------------------------------------------------
+		/																				\
+		|	[+]		Condition				Comparison			Value	Next condition	|
+		|	=======	======================= =================== ======= ==============	|
+		|	[+][-]	User activity points	[ Greater than  v ]	100		[ Or       v ]  |
+		|	[+][-]	Days registered			[ Greater than  v ]	5		[          v ]	|
+		|																				|
+		\-------------------------------------------------------------------------------/
 	
 		 --- Actions -------------------------------------------------------
 		/																	\
 		|	Action					Prompt user								|
 		|	======================= =============== 						|
-		|	Give user 500 credits	No										|
+		|	Give user 500 credits	[ No        v ]							|
 		|																	|
 		\-------------------------------------------------------------------/
 		
